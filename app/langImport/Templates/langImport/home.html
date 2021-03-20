@@ -1,0 +1,32 @@
+{% extends "langImport/base.html" %}
+{% load static %}
+{% block content %}
+
+	<div class="m-5">
+		<form class="d-flex flex-row-reverse">
+	        <input class="form-control me-5" type="search" placeholder="Search" style="width: 300px;" aria-label="Search">
+	        <button class="btn btn-outline-success me-5" type="submit">Search</button>
+	      </form>
+	      <div class="mx-auto" style="width: 350px;"><h1 >Public Lessons</h1></div>
+	      
+	      <div class="card m-auto p-2 mt-5" style="width: 35rem;">
+			<h3>Old Man </h3>
+		  <img src="{% static 'langImport/img/oldman.jpg' %}" class="card-img-top" alt="...">
+		  <div class="card-body">
+		    <p class="card-text"></p>
+		  </div>
+		  <Button class="btn btn-primary m-auto" style="width: 200px;" >Read</Button>
+		</div>
+		<div class="card m-auto p-2 mt-5" style="width: 35rem;">
+		  <h3>Lake </h3>
+		  <img src="{% static 'langImport/img/Lake.jpg' %}" class="card-img-top" alt="...">
+		  <div class="card-body">
+		    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+		  </div>
+		  <Button class="btn btn-primary m-auto" style="width: 200px;">Read</Button>
+		</div>
+	</div>
+	<script type="text/javascript" src="{% static 'langImport/js/home.js' %}"></script>
+		
+
+{% endblock content %}

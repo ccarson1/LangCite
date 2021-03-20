@@ -1,0 +1,73 @@
+{% extends "langImport/base.html" %}
+{% load static %}
+{% block content %}
+	
+
+	<form class="card m-auto p-5 mt-5" style="width: 800px;">
+		<h1 class="m-auto ">Create a Lesson</h1>
+		<label class="mt-3">Select an import method</label>
+		<div class="form-check mt-2">
+		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="Image" >
+		  <label class="form-check-label" for="flexRadioDefault1">
+		    Image
+		  </label>
+		</div>
+		<div class="form-check">
+		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="Text File">
+		  <label class="form-check-label" for="flexRadioDefault2">
+		    Text File
+		  </label>
+		</div>
+		<div class="form-check">
+		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="PDF">
+		  <label class="form-check-label" for="flexRadioDefault3">
+		    PDF
+		  </label>
+		</div>
+		<div class="form-check">
+		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4" value="Youtube url">
+		  <label class="form-check-label" for="flexRadioDefault4">
+		    Youtube url
+		  </label>
+		</div>
+		<div>
+			<div class="mt-3">
+			  
+			  <input class="form-control" type="file" id="fileChoice">
+			</div>
+			<!-- <input type="file" class="btn btn-primary mt-3" id="fileChoice" style="display: block;"></input> -->
+			<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="ytUrl" value ="" style="display: none; width: 600px;">
+			<!-- <button type="submit" class="btn btn-primary mt-3" >Upload</button> -->
+
+		</div>
+		<div  style="width: 400px;">
+			
+			<label class="mt-3">Enter the title of the lesson</label>
+			<div class="input-group mt-3">
+				<span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="lessonName" value ="" >
+			</div>
+	  			  <label class="mt-3">Genre</label>
+				  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"  id="genreSelect">
+					  <option selected></option>
+					  <option value="Adventure">Adventure</option>
+					  <option value="Darma">Drama</option>
+					  <option value="Romance">Romance</option>
+					</select>
+					<label>Check to make your lesson public</label>
+					<div class="form-check mt-3">
+					  <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+					  <label class="form-check-label" for="flexCheckChecked">
+					    Public
+					  </label>
+					</div>
+		</div>
+
+
+		<button type="submit" class="btn btn-primary mt-3" onclick="displayRadioValue();" style="width: 200px;">Create</button>
+	</form>
+	<div id="result"></div>
+	<script type="text/javascript" src="{% static 'langImport/js/importPage.js' %}"></script>
+
+{% endblock content %}
+
