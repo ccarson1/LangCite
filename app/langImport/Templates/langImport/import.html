@@ -2,8 +2,9 @@
 {% load static %}
 {% block content %}
 	
-
-	<form class="card m-auto p-5 mt-5" style="width: 800px;">
+	<h1>{{ yturl }}</h1>
+	<form class="card m-auto p-5 mt-5" style="width: 800px;" method="POST" action="{% url 'web-import' %}" enctype="multipart/form-data">
+		{% csrf_token %}
 		<h1 class="m-auto ">Create a Lesson</h1>
 		<label class="mt-3">Select an import method</label>
 		<div class="form-check mt-2">
@@ -33,10 +34,10 @@
 		<div>
 			<div class="mt-3">
 			  
-			  <input class="form-control" type="file" id="fileChoice">
+			  <input class="form-control" type="file" id="fileChoice" name="myfile">
 			</div>
 			<!-- <input type="file" class="btn btn-primary mt-3" id="fileChoice" style="display: block;"></input> -->
-			<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="ytUrl" value ="" style="display: none; width: 600px;">
+			<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="ytUrl" name="yturl" value ="" style="display: none; width: 600px;">
 			<!-- <button type="submit" class="btn btn-primary mt-3" >Upload</button> -->
 
 		</div>
@@ -45,10 +46,10 @@
 			<label class="mt-3">Enter the title of the lesson</label>
 			<div class="input-group mt-3">
 				<span class="input-group-text" id="inputGroup-sizing-default">Title</span>
-				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="lessonName" value ="" >
+				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="title" id="lessonName" >
 			</div>
 	  			  <label class="mt-3">Genre</label>
-				  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"  id="genreSelect">
+				  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"  id="genreSelect" name="genre">
 					  <option selected></option>
 					  <option value="Adventure">Adventure</option>
 					  <option value="Darma">Drama</option>
@@ -56,7 +57,7 @@
 					</select>
 					<label>Check to make your lesson public</label>
 					<div class="form-check mt-3">
-					  <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+					  <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" name="up_public" checked>
 					  <label class="form-check-label" for="flexCheckChecked">
 					    Public
 					  </label>

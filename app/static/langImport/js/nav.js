@@ -29,7 +29,7 @@ function checkCookie() {
   if (lang != "") {
     document.getElementById("targetLanguage").innerHTML = lang;
   } else {
-    lang = prompt("Please select a language:", "");
+    // lang = prompt("Please select a language:", "");
     if (lang != "" && lang != null) {
       setCookie("Language", lang, 365);
     }
