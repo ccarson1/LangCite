@@ -35,7 +35,7 @@ def string_to_json(lesson_string):
     new_json = new_json.replace("'", '"')  # replaces single quotes with double quotes
     new_json = remove_control_characters(new_json)
     print(json)
-    trans_string = io.open('ttj.json', 'w', encoding="utf-8")
+    trans_string = io.open('imports_json/ttj.json', 'w', encoding="utf-8")
     trans_string.write(new_json)
     trans_string.close()
 
@@ -69,11 +69,11 @@ def pdf_to_string(pdf_file, target_lang):
     newstring = ''
     for i in range(len(images)):
         # Save pages as images in the pdf
-        images[i].save('_page' + str(i) + '.jpg', 'JPEG')
+        images[i].save('temp_images/_page' + str(i) + '.jpg', 'JPEG')
 
     for i in range(len(images)):
-        newstring = newstring + image_to_string('_page' + str(i) + '.jpg', target_lang)
-        os.remove('_page' + str(i) + '.jpg')
+        newstring = newstring + image_to_string('temp_images/_page' + str(i) + '.jpg', target_lang)
+        os.remove('temp_images/_page' + str(i) + '.jpg')
 
     return newstring
 
@@ -82,4 +82,4 @@ def remove_control_characters(s):
     return "".join(ch for ch in s if unicodedata.category(ch)[0] != "C")
 
 
-string_to_json(pdf_to_string('russian_folk.pdf', 'rus'))
+

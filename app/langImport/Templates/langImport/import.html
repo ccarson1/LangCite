@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 	
-	<h1>{{ yturl }}</h1>
+	<h1>{{ up_method }}</h1>
 	<form class="card m-auto p-5 mt-5" style="width: 800px;" method="POST" action="{% url 'web-import' %}" enctype="multipart/form-data">
 		{% csrf_token %}
 		<h1 class="m-auto ">Create a Lesson</h1>
