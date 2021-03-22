@@ -77,6 +77,10 @@ def pdf_to_string(pdf_file, target_lang):
 
     return newstring
 
+def text_to_string(text_file):
+    text = io.open(text_file, 'r', encoding="utf-8")
+    string_to_json(text.read())
+
 
 def remove_control_characters(s):
     return "".join(ch for ch in s if unicodedata.category(ch)[0] != "C")

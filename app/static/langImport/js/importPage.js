@@ -54,4 +54,11 @@ document.getElementById("fileChoice").addEventListener("click", function(){
 	console.log(document.getElementById("fileChoice"));
 });
 
+//sets the lesson language as the cookie language
+document.getElementById("lessonLang").textContent = getCookie("Language");
+document.getElementById("lessonLang").value = getCookie("Language");
+
+
+
+
 checkCookie();

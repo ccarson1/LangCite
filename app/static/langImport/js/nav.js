@@ -7,6 +7,14 @@ function langFun(langItem){
   var expires = "expires="+ d.toUTCString();
   document.cookie = "Language=" + langItem + ";" + expires + ";path=/";
   document.getElementById("targetLanguage").innerHTML = langItem;
+
+
+  if(window.location.pathname == '/import/'){
+    document.getElementById("lessonLang").textContent = getCookie("Language");
+    document.getElementById("lessonLang").value = getCookie("Language");
+  }
+
+  
 }
 
 function getCookie(cname) {
