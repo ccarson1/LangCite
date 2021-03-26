@@ -35,7 +35,7 @@ function getCookie(cname) {
 function checkCookie() {
   var lang = getCookie("Language");
   if (lang != "") {
-    document.getElementById("targetLanguage").innerHTML = lang;
+     document.getElementById("targetLanguage").innerHTML = lang;
   } else {
     // lang = prompt("Please select a language:", "");
     if (lang != "" && lang != null) {
@@ -43,5 +43,4 @@ function checkCookie() {
     }
   }
 }
-
-checkCookie();
+window.onload = (function(){checkCookie()});
