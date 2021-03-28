@@ -4,6 +4,7 @@ from django.core.files.storage import FileSystemStorage
 import LessonImportLib
 import os
 from django.core.files.storage import default_storage
+from django.contrib.auth.models import User
 
 # Create your views here.
 def home(request):
@@ -11,7 +12,13 @@ def home(request):
 
 def import_page(request):
 
+	
 	if request.method == "POST":
+		
+		if(os.path.isdir(os.path.join('static/langImport/json/users/' + request.user.username + "/lessons" ) )== False):
+			os.makedirs(os.path.join('static/langImport/json/users/' + request.user.username + "/lessons" ))
+
+
 		up_method = request.POST['flexRadioDefault']
 		up_title = request.POST['title']
 		genre = request.POST['genre']
@@ -29,11 +36,11 @@ def import_page(request):
 			yturl = 'no url'
 
 			if up_method == 'PDF':
-				LessonImportLib.string_to_json(LessonImportLib.pdf_to_string('media/' + filename, 'rus'), up_title)
+				LessonImportLib.string_to_json(LessonImportLib.pdf_to_string('media/' + filename, 'rus'), up_title, os.path.join('static/langImport/json/users/' + request.user.username + "/lessons" ))
 			elif up_method == 'Text File':
-				LessonImportLib.text_to_string('media/' + filename, up_title)
+				LessonImportLib.text_to_string('media/' + filename, up_title, os.path.join('static/langImport/json/users/' + request.user.username + "/lessons" ))
 			elif up_method == 'Image':
-				LessonImportLib.string_to_json(LessonImportLib.image_to_string('media/' + filename, 'rus'), up_title)
+				LessonImportLib.string_to_json(LessonImportLib.image_to_string('media/' + filename, 'rus'), up_title,os.path.join('static/langImport/json/users/' + request.user.username + "/lessons" ))
 		else:
 			yturl = request.POST['yturl']
 			LessonImportLib.youtube_to_json(LessonImportLib.extract_id(yturl), 'ru', 'en')

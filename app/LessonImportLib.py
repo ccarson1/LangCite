@@ -28,7 +28,7 @@ def image_to_string(image_file, imageLang):
 
 
 # pass a string and create a json file
-def string_to_json(lesson_string, lesson_name):
+def string_to_json(lesson_string, lesson_name, location_save):
     lesson_string = lesson_string.replace("\n", " ")
     lesson_string = lesson_string.replace("- ", '')
     lesson_string = lesson_string.split(". ")
@@ -44,7 +44,7 @@ def string_to_json(lesson_string, lesson_name):
     new_json = new_json.replace("'", '"')  # replaces single quotes with double quotes
     new_json = remove_control_characters(new_json)
     print(json)
-    trans_string = io.open('imports_json/' + lesson_name + '.json', 'w', encoding="utf-8")
+    trans_string = io.open(location_save + lesson_name + '.json', 'w', encoding="utf-8")
     trans_string.write(new_json)
     trans_string.close()
 
@@ -87,10 +87,10 @@ def pdf_to_string(pdf_file, target_lang):
 
     return newstring
 
-def text_to_string(text_file, lesson_name):
+def text_to_string(text_file, lesson_name, lesson_save):
     # new_file_name = os.path.splitext(text_file)[0] + ''
     text = io.open(text_file, 'r', encoding="utf-8")
-    string_to_json(text.read(), lesson_name)
+    string_to_json(text.read(), lesson_name, lesson_save)
     text.close()
     os.remove(text_file)
 
