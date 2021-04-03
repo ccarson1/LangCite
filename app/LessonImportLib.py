@@ -28,25 +28,29 @@ def image_to_string(image_file, imageLang):
 
 
 # pass a string and create a json file
-def string_to_json(lesson_string, lesson_name, location_save):
+def string_to_json(lesson_string, target_lang, native_lang):
     lesson_string = lesson_string.replace("\n", " ")
     lesson_string = lesson_string.replace("- ", '')
+    lesson_string = lesson_string.replace("\\", '')
     lesson_string = lesson_string.split(". ")
+
     new_json = ''
 
     for x in lesson_string:
-        x = "{'text':" + "'" + x + "'},"
-        print(x)
-        new_json = new_json + x
+        k = x.split(" ")
+        for y in k:
+
+            nj = "{'" + target_lang + "':" + "'" + y + "','" + native_lang + "':" + "'" + "' },"
+            print(nj)
+            new_json = new_json + nj
 
     new_json = new_json.rstrip(new_json[-1])
-    new_json = "[" + new_json + "]"
+    new_json = "{'lesson_words': [" + new_json + "]}"
     new_json = new_json.replace("'", '"')  # replaces single quotes with double quotes
     new_json = remove_control_characters(new_json)
-    print(json)
-    trans_string = io.open(location_save + lesson_name + '.json', 'w', encoding="utf-8")
-    trans_string.write(new_json)
-    trans_string.close()
+    print(new_json)
+    new_json = json.loads(new_json)
+    return json.dumps(new_json, ensure_ascii=False)
 
 
 # pass video code, target language and native language to create a json file
@@ -62,13 +66,10 @@ def youtube_to_json(urlString, targetLang, nativeLang):
 
     new_string = new.replace('\\xa0', '')  # removes \\XaO
     new_string = new_string.replace('\\n', ' ')  # replaces \n with a space
-    json.dumps(new_string)
-    print(new_string)
+    new_string = json.loads(new_string)
+    return json.dumps(new_string, ensure_ascii=False)
 
-    transText = io.open('imports_json/' + video_id + '.json', 'w', encoding="utf-8")
-    transText.write(new_string)
-    transText.close()
-
+    
 
 # converts a pdf to image then image to string
 # depends on image_to_string method to work!!!
@@ -87,12 +88,13 @@ def pdf_to_string(pdf_file, target_lang):
 
     return newstring
 
-def text_to_string(text_file, lesson_name, lesson_save):
+def text_to_string(text_file, target_lang, native_lang):
     # new_file_name = os.path.splitext(text_file)[0] + ''
     text = io.open(text_file, 'r', encoding="utf-8")
-    string_to_json(text.read(), lesson_name, lesson_save)
+    text_json_obj = string_to_json(text.read(), target_lang, native_lang)
     text.close()
-    os.remove(text_file)
+    # os.remove(text_file)
+    return text_json_obj
 
 def remove_control_characters(s):
     return "".join(ch for ch in s if unicodedata.category(ch)[0] != "C")

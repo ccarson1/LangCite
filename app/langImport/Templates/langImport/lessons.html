@@ -1,0 +1,38 @@
+{% extends "langImport/base.html" %}
+{% load static %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+	<h1 class="mt-5">Lessons</h1>
+	<div class="row row-cols-1 row-cols-md-3 g-4 mt-5 " >
+	{% for lesson in object_list %}
+		
+		
+		
+	  <div class="col" >
+	  	
+	    <div class="card h-100 card text-white bg-primary mb-3">
+	      <img src="{% static 'langImport/img/oldman.jpg' %}" class="card-img-top" alt="...">
+	      <div class="card-body">
+	        <h5 class="card-title" >{{ lesson.lesson_title }}</h5>
+	        
+	      </div>
+	      <div class="card-footer">
+	        <small class="text-muted">By : {{ lesson.user_id }}</small>
+	        <a class="btn btn-success" href="{% url 'web-read' lesson.pk %}">Read</a>
+	      </div>
+	    </div>
+	  </div>
+	{% endfor %}
+	</div>
+
+
+{% else %}
+	Unauthorized Page!!
+
+{% endif %}
+
+		
+
+{% endblock content %}

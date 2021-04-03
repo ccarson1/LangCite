@@ -57,7 +57,7 @@ document.getElementById("fileChoice").addEventListener("click", function(){
 //sets the lesson language as the cookie language
 document.getElementById("lessonLang").textContent = getCookie("Language");
 document.getElementById("lessonLang").value = getCookie("Language");
-
+document.getElementById("userLang").value = getCookie("Native");
 
 
 

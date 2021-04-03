@@ -1,0 +1,38 @@
+{% extends "langImport/base.html" %}
+{% load static %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+
+	<h1>Settings</h1>
+
+	<p>Choose your native language</p>
+	<div class="container">
+		<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+		  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="English" checked>
+		  <label class="btn btn-outline-primary" for="btnradio1">English</label>
+
+		  <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="Spanish">
+		  <label class="btn btn-outline-primary" for="btnradio2">Spanish</label>
+
+		  <input type="radio" class="btn-check" name="btnradio" id="btnradio3" value="French">
+		  <label class="btn btn-outline-primary" for="btnradio3">French</label>
+
+		  <input type="radio" class="btn-check" name="btnradio" id="btnradio4" value="Russian">
+		  <label class="btn btn-outline-primary" for="btnradio4">Russian</label>
+		</div>
+	</div>
+	
+	<div class="container mt-3" >
+		<button type="button" class="btn btn-primary" onclick="setNativeLang();">Ok</button>
+	</div>
+	
+	{% else %}
+	Unauthorized Page!!
+
+{% endif %}
+
+		
+	<script type="text/javascript" src="{% static 'langImport/js/settings.js' %}"></script>
+{% endblock content %}

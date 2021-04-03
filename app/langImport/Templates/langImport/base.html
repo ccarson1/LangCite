@@ -10,6 +10,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script type="text/javascript" src = "{% static 'langImport/js/nav.js' %}"></script>
+    
 </head>
 <body>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -23,10 +24,11 @@
 		        <li class="nav-item">
 		          <a class="nav-link active" aria-current="page" href="{% url 'web-home' %}">Home</a>
 		        </li>
-		         <li class="nav-item">
-		          <a class="nav-link" href="">Lessons</a>
-		        </li>
+		         
 		        {% if user.is_authenticated %}
+		        	<li class="nav-item">
+			          <a class="nav-link" href="{% url 'web-lessons' %}">Lessons</a>
+			        </li>
 			        <li class="nav-item">
 			          <a class="nav-link" href="{% url 'web-import' %}">Import</a>
 			        </li>
@@ -56,7 +58,21 @@
 		      <div class="d-flex flex-row-reverse m-2" >
 		      	{% if user.is_authenticated %}
 		      		<a class="btn btn-outline-success me-3" href="{% url 'logout' %}">Logout</a>
-			        <a class="nav-link" href="">{{ user.first_name }}</a>
+			        
+			        <div class="dropdown">
+					  <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+					    {{ user.first_name }}
+					  </a>
+					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					    <li><a class="dropdown-item" href="{% url 'web-import' %}">Import</a></li>
+					    <li><a class="dropdown-item" href="{% url 'web-lessons' %}">Lessons</a></li>
+					    <li><a class="dropdown-item" href="{% url 'web-settings' %}">Settings</a></li>
+					  </ul>
+					</div>
+
+			        
+			          
+			       
 		      	{% else %}
 		      		<a class="btn btn-outline-success me-3" href="{% url 'login' %}">Login</a>
 					<a class="btn btn-outline-success me-3" href="{% url 'register' %}">Register</a>

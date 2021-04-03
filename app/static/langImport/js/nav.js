@@ -14,6 +14,8 @@ function langFun(langItem){
     document.getElementById("lessonLang").value = getCookie("Language");
   }
 
+
+
   
 }
 
@@ -43,4 +45,18 @@ function checkCookie() {
     }
   }
 }
+
+function checkNativeCookie() {
+  var lang = getCookie("Native");
+  if (lang != "") {
+     document.getElementById("userLang").value = lang;
+  } else {
+    // lang = prompt("Please select a language:", "");
+    if (lang != "" && lang != null) {
+      setCookie("Native", lang, 365);
+    }
+  }
+}
 window.onload = (function(){checkCookie()});
+window.onload = (function(){checkNativeCookie()});
+
