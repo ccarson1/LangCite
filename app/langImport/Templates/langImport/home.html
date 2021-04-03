@@ -9,6 +9,8 @@
 	      </form>
 
 	      <div class="mx-auto" style="width: 350px;"><h1 >Public Lessons</h1></div>
+	      <!-- Gets the object list from the lesson table in the database
+	      		and displays all the lessons that have a public boolean of true -->
 	      {% for lesson in object_list %}
 		      {% if lesson.public == True %}
 		      <div class="card m-auto p-2 mt-5" style="width: 35rem;">

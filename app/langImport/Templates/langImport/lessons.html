@@ -21,6 +21,8 @@
 	      <div class="card-footer">
 	        <small class="text-muted">By : {{ lesson.user_id }}</small>
 	        <a class="btn btn-success" href="{% url 'web-read' lesson.pk %}">Read</a>
+	        <a type="button" class="btn btn-outline-success" href="{% url 'edit-lesson' lesson.pk %}">Edit</a>
+	        <a type="button" class="btn btn-outline-success" href="{% url 'delete-lesson' lesson.pk %}">Delete</a>
 	      </div>
 	    </div>
 	  </div>

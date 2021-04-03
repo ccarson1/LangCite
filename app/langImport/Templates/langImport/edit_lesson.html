@@ -1,0 +1,23 @@
+{% extends "langImport/base.html" %}
+{% load static %}
+{% block content %}
+	{% if user.is_authenticated %}
+	<h1>Edit</h1>
+	<div class="form-group">
+			<form method="POST">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<button class="btn btn-secondary">Save</button>
+				<a class="btn btn-secondary" href="{% url 'web-lessons' %}">Cancel</a>
+				
+			</form>
+				
+		
+	</div>
+	{% else %}
+	Unauthorized Page!!
+
+	{% endif %}
+
+
+{% endblock %}

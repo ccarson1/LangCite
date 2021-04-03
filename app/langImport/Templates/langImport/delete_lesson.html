@@ -1,0 +1,24 @@
+{% extends "langImport/base.html" %}
+{% load static %}
+{% block content %}
+	{% if user.is_authenticated %}
+	<h1>Delete</h1>
+	<div class="form-group mt-5">
+			<form method="POST">
+				{% csrf_token %}
+				<strong class="alert alert-danger" >Are you sure you want to delete lesson "{{ lesson.lesson_title }}"?</strong><br>
+				<button class="btn btn-secondary mt-5">Delete</button>
+				<a class="btn btn-secondary mt-5" href="{% url 'web-lessons'%}">Cancel</a>
+				
+				
+			</form>
+				
+		
+	</div>
+	{% else %}
+	Unauthorized Page!!
+
+	{% endif %}
+
+
+{% endblock %}

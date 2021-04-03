@@ -1,31 +1,5 @@
-function displayRadioValue() { 
-    var ele = document.getElementsByName('flexRadioDefault'); 
-    var url = document.getElementById('ytUrl');
-    var output;
-    for(i = 0; i < ele.length; i++) { 
-        if(ele[i].checked) 
-        	output = ele[i].value;
-        // alert("Import by: "+ele[i].value); 
-    } 
-
-    if(url.style.display == "none"){
-    	output = '[{ "method":"' + output + '"}, {"name":"' + 
-			document.getElementById('lessonName').value + '"}, {"language":"' +
-			getCookie("Language") + '"}, {"genre":"' +
-			document.getElementById('genreSelect').value + '"}, {"public":"' +
-			document.getElementById("flexCheckChecked").checked + '"}]';
-    }
-    else{
-    	alert(url.value);
-    	output = '[{ "method":"' + output + '"}, {"name":"' + 
-			document.getElementById('lessonName').value + '"}, {"language":"' +
-			getCookie("Language") + '"}, {"genre":"' +
-			document.getElementById('genreSelect').value + '"}, {"public":"' +
-			document.getElementById("flexCheckChecked").checked + '"}, {"url":"' +
-			url.value + '"}]';
-    }
-   alert(output);
-} 
+ 
+#sets the input as a file uploader or a text input
 
 document.getElementById("flexRadioDefault4").addEventListener("click", function(){
 	document.getElementById("fileChoice").style.display = "none";

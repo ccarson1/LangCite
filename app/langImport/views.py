@@ -5,18 +5,19 @@ import LessonImportLib
 import os
 from django.core.files.storage import default_storage
 from django.contrib.auth.models import User
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from .models import Lesson
 from .models import Genre
 from .models import Language
-
+from .forms import EditForm
+from django.urls import reverse_lazy
 
 
 # Create your views here.
 class HomeView(ListView):
 	model =Lesson
 	template_name = 'langImport/home.html'
-
+	ordering = ['-id'] # changes the order of the lessons displayed
 
 class LessonView(ListView):
 	model = Lesson
@@ -33,6 +34,7 @@ def import_page(request):
 	
 	if request.method == "POST":
 
+		#posts the data from the import form and sets them to variables
 		up_method = request.POST['flexRadioDefault']
 		up_title = request.POST['title']
 		genre = request.POST['genre']
@@ -42,7 +44,7 @@ def import_page(request):
 		authorName = request.POST['authorName']
 
 		if lessonLang or userLang != "":
-			
+			#gets the file from the file uploader if the youtube url option is not selected
 			if up_method != 'Youtube url':
 				request.FILES['myfile']
 				myfile = request.FILES['myfile']
@@ -85,4 +87,14 @@ def import_page(request):
 	else:
 		return render(request, 'langImport/import.html', {})
 
-	
+
+class EditLessonView(UpdateView):
+	model = Lesson
+	form_class = EditForm
+	template_name = 'langImport/edit_lesson.html'
+	# fields = ['lesson_title', 'genre_id', 'public', 'json_file' ]
+
+class DeleteLessonView(DeleteView):
+	model = Lesson
+	template_name = 'langImport/delete_lesson.html'
+	success_url = reverse_lazy('web-lessons')
