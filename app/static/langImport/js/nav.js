@@ -38,7 +38,8 @@ function checkCookie() {
   var lang = getCookie("Language");
   if (lang != "") {
      document.getElementById("targetLanguage").innerHTML = lang;
-  } else {
+  } 
+  else {
     // lang = prompt("Please select a language:", "");
     if (lang != "" && lang != null) {
       setCookie("Language", lang, 365);
@@ -46,17 +47,8 @@ function checkCookie() {
   }
 }
 
-function checkNativeCookie() {
-  var lang = getCookie("Native");
-  if (lang != "") {
-     document.getElementById("userLang").value = lang;
-  } else {
-    // lang = prompt("Please select a language:", "");
-    if (lang != "" && lang != null) {
-      setCookie("Native", lang, 365);
-    }
-  }
-}
+
 window.onload = (function(){checkCookie()});
-window.onload = (function(){checkNativeCookie()});
+
+
 

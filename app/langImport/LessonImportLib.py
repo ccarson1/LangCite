@@ -27,68 +27,31 @@ def image_to_string(image_file, imageLang):
     return image_string
 
 
-def string_to_json_format(lesson_string, target_lang, native_lang):
-    lesson_string = remove_control_characters(lesson_string)
+# pass a string and create a json file
+def string_to_json(lesson_string, target_lang, native_lang):
     lesson_string = lesson_string.replace("\n", " ")
     lesson_string = lesson_string.replace("- ", '')
     lesson_string = lesson_string.replace("\\", '')
     lesson_string = lesson_string.split(". ")
 
-    for m in lesson_string:
-        for n in m:
-            n.replace("/,", "")
-            
+    new_json = ''
 
-    new_json = '{"lesson_sentences":['
+    for x in lesson_string:
+        k = x.split(" ")
+        for y in k:
 
-    count = 1
-    w_count = 0
-    for i in lesson_string:
-        new_string = i.split(" ")
-        new_json = new_json + '{"sentence_' + str(count)
-        count = count + 1
-        new_json = new_json + '":['
-        sent_count = 0
-        w_count = w_count + 1
-        for k in new_string:
+            nj = "{'" + target_lang + "':" + "'" + y + "','" + native_lang + "':" + "'" + "' },"
+            print(nj)
+            new_json = new_json + nj
 
-            sent_count = sent_count + 1
-            if len(new_string) > sent_count:
-                new_json = new_json + '{"Russian":"' + k + '","English": ""},'
+    new_json = new_json.rstrip(new_json[-1])
+    new_json = "{'lesson_words': [" + new_json + "]}"
+    new_json = new_json.replace("'", '"')  # replaces single quotes with double quotes
+    new_json = remove_control_characters(new_json)
+    print(new_json)
+    new_json = json.loads(new_json)
+    return json.dumps(new_json, ensure_ascii=False)
 
-            else:
-                new_json = new_json + '{"Russian":"' + k + '","English": ""}'
-        if len(lesson_string) > w_count:
-            new_json = new_json + ']},'
-        else:
-            new_json = new_json + ']}]}'
-
-    return new_json
-
-
-
-
-
-    # new_json = ''
-    #
-    # for x in lesson_string:
-    #     k = x.split(" ")
-    #     for y in k:
-    #
-    #         nj = "{'" + target_lang + "':" + "'" + y + "','" + native_lang + "':" + "'" + "' },"
-    #         print(nj)
-    #         new_json = new_json + nj
-    #
-    # new_json = new_json.rstrip(new_json[-1])
-    # new_json = "{'lesson_words': [" + new_json + "]}"
-    # new_json = new_json.replace("'", '"')  # replaces single quotes with double quotes
-
-    # print(new_json)
-    # new_json = json.loads(new_json)
-    # return json.dumps(new_json, ensure_ascii=False)
-def string_to_json(json_string):
-    json_format = json.loads(json_string)
-    return json.dumps(json_format, ensure_ascii=False)
 
 # pass video code, target language and native language to create a json file
 def youtube_to_json(urlString, targetLang, nativeLang):
@@ -99,7 +62,7 @@ def youtube_to_json(urlString, targetLang, nativeLang):
 
     new = transcript.replace('"', '')  # removes double quotes
     new = new.replace("'", '"')  # replaces single quotes with double quotes
-    
+    print(type(new))
 
     new_string = new.replace('\\xa0', '')  # removes \\XaO
     new_string = new_string.replace('\\n', ' ')  # replaces \n with a space
@@ -128,7 +91,7 @@ def pdf_to_string(pdf_file, target_lang):
 def text_to_string(text_file, target_lang, native_lang):
     # new_file_name = os.path.splitext(text_file)[0] + ''
     text = io.open(text_file, 'r', encoding="utf-8")
-    text_json_obj = string_to_json(string_to_json_format(text.read(), target_lang, native_lang))
+    text_json_obj = string_to_json(text.read(), target_lang, native_lang)
     text.close()
     # os.remove(text_file)
     return text_json_obj

@@ -3,13 +3,19 @@
 {% block content %}
 	
 	
-	<div  role="alert">
-	  <p>{{ lessonLang }}</p>
+	<div  id="noLang">
+	  <p id = "noLangVal">{{ lessonLang }}</p>
+	</div>
+	<div  id="noNative">
+	  <p id = "noNativeVal">{{ userLang }}</p>
 	</div>
 
 	{% if user.is_authenticated %}
 
-		<form class="card m-auto p-5 mt-5 mb-5" style="width: 800px;" method="POST" action="{% url 'web-import' %}" enctype="multipart/form-data">
+		<form class="card m-auto p-5 mt-5 mb-5 was-validated" style="width: 800px;" method="POST" action="{% url 'web-import' %}" enctype="multipart/form-data">
+			<div class="container ">
+				<a class="btn btn-primary m-5" href="{% url 'web-home' %}" style="width: 100px; float: right;">Cancel</a>
+			</div>
 			{% csrf_token %}
 			<h1 class="m-auto mb-3">Create a Lesson</h1>
 			<div class="card m-auto mt-3">
@@ -21,17 +27,17 @@
 			  
 			</div>
 			<label class="mt-5">Select an import method</label>
-			<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-			  <input type="radio" class="btn-check" name="flexRadioDefault" id="flexRadioDefault1" autocomplete="off" value="Image">
+			<div class="btn-group" role="group" aria-label="Basic radio toggle button group" >
+			  <input type="radio" class="btn-check form-check" name="flexRadioDefault" id="flexRadioDefault1" autocomplete="off" value="Image">
 			  <label class="btn btn-outline-primary" for="flexRadioDefault1">Image</label>
 
-			  <input type="radio" class="btn-check" name="flexRadioDefault" id="flexRadioDefault2" autocomplete="off" value="Text File">
+			  <input type="radio" class="btn-check " name="flexRadioDefault" id="flexRadioDefault2" autocomplete="off" value="Text File">
 			  <label class="btn btn-outline-primary" for="flexRadioDefault2"> Text File</label>
 
-			  <input type="radio" class="btn-check" name="flexRadioDefault"id="flexRadioDefault3" autocomplete="off" value="PDF">
+			  <input type="radio" class="btn-check " name="flexRadioDefault"id="flexRadioDefault3" autocomplete="off" value="PDF">
 			  <label class="btn btn-outline-primary" for="flexRadioDefault3">PDF</label>
 
-			  <input type="radio" class="btn-check" name="flexRadioDefault" id="flexRadioDefault4" autocomplete="off" value="Youtube url">
+			  <input type="radio" class="btn-check " name="flexRadioDefault" id="flexRadioDefault4" autocomplete="off" value="Youtube url">
 			  <label class="btn btn-outline-primary" for="flexRadioDefault4">Youtube url</label>
 			</div>
 			<div>
@@ -46,14 +52,18 @@
 				<label class="mt-3">Enter the title of the lesson</label>
 				<div class="input-group mt-3">
 					<span class="input-group-text" id="inputGroup-sizing-default">Title</span>
-					<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="title" id="lessonName" >
+					<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="title" id="lessonName" required>
 				</div>
 		  			  <label class="mt-3">Genre</label>
-					  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"  id="genreSelect" name="genre">
+					  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"  id="genreSelect" name="genre" required>
 						  <option selected></option>
 						  <option value="Adventure">Adventure</option>
 						  <option value="Drama">Drama</option>
 						  <option value="Romance">Romance</option>
+						  <option value="Romance">Comedy</option>
+						  <option value="Romance">Horror</option>
+						  <option value="Romance">History</option>
+						  <option value="Romance">Education</option>
 						</select>
 						<label>Check to make your lesson public</label>
 						<div class="form-check mt-3">
@@ -64,7 +74,10 @@
 						</div>
 			</div>
 			<button type="submit" class="btn btn-primary mt-3"  style="width: 200px;">Create</button>
+			
 		</form>
+		
+		
 		<div id="result"></div>
 
 	{% else %}

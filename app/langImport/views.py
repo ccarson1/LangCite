@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-import LessonImportLib
+import LessonImportLib as IM
 import os
 from django.core.files.storage import default_storage
 from django.contrib.auth.models import User
@@ -43,7 +43,9 @@ def import_page(request):
 		lessonLang = request.POST['lessonLang']
 		authorName = request.POST['authorName']
 
-		if lessonLang or userLang != "":
+
+
+		if userLang or lessonLang != "":
 			#gets the file from the file uploader if the youtube url option is not selected
 			if up_method != 'Youtube url':
 				request.FILES['myfile']
@@ -53,34 +55,45 @@ def import_page(request):
 				uploaded_file_url = fs.url(filename)
 				yturl = 'no url'
 
+				if lessonLang == "Russian":
+					translate_lang = 'rus'
+
 				#saves json from pdf method
 				if up_method == 'PDF':
-					lesson_json = LessonImportLib.string_to_json(LessonImportLib.pdf_to_string('media/' + filename, 'rus'), lessonLang, 'English')
+					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.pdf_to_string('media/' + filename, translate_lang), lessonLang, 'English'))))
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), json_file = lesson_json)
 					newlesson.save()
 				#saves json from text file
 				elif up_method == 'Text File':
-					lesson_json = LessonImportLib.text_to_string('media/' + filename, lessonLang, 'English')
+					lesson_json = IM.text_to_string('media/' + filename, lessonLang, 'English')
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), json_file = lesson_json)
 					newlesson.save()
 				#saves json from image
 				elif up_method == 'Image':
-					lesson_json = LessonImportLib.string_to_json(LessonImportLib.image_to_string('media/' + filename, 'rus'), lessonLang, 'English')
+					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.image_to_string('media/' + filename, translate_lang), lessonLang, 'English'))))
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), json_file = lesson_json )
 					newlesson.save()
 				#loads this page without youtube url selected
 				return render(request, 'langImport/import.html', {'userLang' : userLang , 'authorName' : authorName, 'yturl' : yturl})
 			else:
+				if userLang == "English":
+					native_lang = 'en'
+				if lessonLang == "Russian":
+					translate_lang = 'ru'
+
 				#saves json from youtube url
 				yturl = request.POST['yturl']
-				lesson_json = LessonImportLib.youtube_to_json(LessonImportLib.extract_id(yturl), 'ru', 'en' )
+				lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, translate_lang )
 				newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), json_file = lesson_json)
 				newlesson.save()
 				#loads this page when youtube url is selected
 				return render(request, 'langImport/import.html', {'userLang' : userLang , 'authorName' : authorName, 'yturl' : yturl})
 		else:
-			lessonLang = "No Target Language!!!"
-			return render(request, 'langImport/import.html', {'lessonLang' : lessonLang })
+			if lessonLang == "":
+				lessonLang = "No Target Language!!!"
+			if userLang == "":
+				userLang = "No Native language selected!!!"
+			return render(request, 'langImport/import.html', {'lessonLang' : lessonLang, 'userLang' : userLang })
 		
 
 		
