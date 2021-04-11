@@ -44,6 +44,13 @@ def import_page(request):
 		authorName = request.POST['authorName']
 
 
+		#converts string value from checkbox to a boolean value
+		if(up_public == "no"):
+			up_public = False
+		else:
+			up_public = True
+
+
 
 		if userLang or lessonLang != "":
 			#gets the file from the file uploader if the youtube url option is not selected
@@ -55,23 +62,24 @@ def import_page(request):
 				uploaded_file_url = fs.url(filename)
 				yturl = 'no url'
 
+				#sets the language references for supported languages
 				if lessonLang == "Russian":
 					translate_lang = 'rus'
 
 				#saves json from pdf method
 				if up_method == 'PDF':
 					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.pdf_to_string('media/' + filename, translate_lang), lessonLang, 'English'))))
-					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), json_file = lesson_json)
+					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 					newlesson.save()
 				#saves json from text file
 				elif up_method == 'Text File':
 					lesson_json = IM.text_to_string('media/' + filename, lessonLang, 'English')
-					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), json_file = lesson_json)
+					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 					newlesson.save()
 				#saves json from image
 				elif up_method == 'Image':
 					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.image_to_string('media/' + filename, translate_lang), lessonLang, 'English'))))
-					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), json_file = lesson_json )
+					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json )
 					newlesson.save()
 				#loads this page without youtube url selected
 				return render(request, 'langImport/import.html', {'userLang' : userLang , 'authorName' : authorName, 'yturl' : yturl})
@@ -84,7 +92,7 @@ def import_page(request):
 				#saves json from youtube url
 				yturl = request.POST['yturl']
 				lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, translate_lang )
-				newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), json_file = lesson_json)
+				newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 				newlesson.save()
 				#loads this page when youtube url is selected
 				return render(request, 'langImport/import.html', {'userLang' : userLang , 'authorName' : authorName, 'yturl' : yturl})

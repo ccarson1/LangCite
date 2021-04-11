@@ -24,7 +24,7 @@ class Lesson(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     language_id = models.ForeignKey(Language, on_delete=models.CASCADE)
     genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE)
-    public = models.BooleanField(default=False)
+    public = models.BooleanField(default=True)
     # this json_file contains both original text and translated text
     json_file = jsonfield.JSONField()
   
