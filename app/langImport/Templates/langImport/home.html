@@ -15,11 +15,14 @@
 		      {% if lesson.public == True %}
 		      <div class="card m-auto p-2 mt-5" style="width: 35rem;">
 				<h3>{{ lesson.lesson_title }}</h3>
-				<small class="text-muted">By : {{ lesson.user_id }}</small>
+
+
 				  <img src="{% static 'langImport/img/oldman.jpg' %}" class="card-img-top" alt="...">
 				  <div class="card-body">
 				    <p class="card-text"></p>
 				  </div>
+				  <small class="text-muted">By : {{ lesson.user_id }}</small><br/>
+				  <small class="text-muted">Language : {{ lesson.language_id }}</small><br/>
 				  <a class="btn btn-primary m-auto" style="width: 200px;" href="{% url 'web-read' lesson.pk %}">Read</a>
 			 </div>
 			{% endif %}

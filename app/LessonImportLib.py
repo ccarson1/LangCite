@@ -54,10 +54,10 @@ def string_to_json_format(lesson_string, target_lang, native_lang):
 
             sent_count = sent_count + 1
             if len(new_string) > sent_count:
-                new_json = new_json + '{"Russian":"' + k + '","English": ""},'
+                new_json = new_json + '{"'+ target_lang +'":"' + k + '","'+ native_lang +'": ""},'
 
             else:
-                new_json = new_json + '{"Russian":"' + k + '","English": ""}'
+                new_json = new_json + '{"'+ target_lang +'":"' + k + '","'+ native_lang +'": ""}'
         if len(lesson_string) > w_count:
             new_json = new_json + ']},'
         else:

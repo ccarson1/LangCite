@@ -38,17 +38,18 @@ def import_page(request):
 		up_method = request.POST['flexRadioDefault']
 		up_title = request.POST['title']
 		genre = request.POST['genre']
-		up_public = request.POST['up_public']
+		up_public = request.POST['public']
 		userLang = request.POST['userLang']
 		lessonLang = request.POST['lessonLang']
 		authorName = request.POST['authorName']
 
 
+
 		#converts string value from checkbox to a boolean value
-		if(up_public == "no"):
-			up_public = False
-		else:
-			up_public = True
+		# if(up_public == "unchecked"):
+		# 	up_public = False
+		# else:
+		# 	up_public = True
 
 
 
@@ -65,6 +66,8 @@ def import_page(request):
 				#sets the language references for supported languages
 				if lessonLang == "Russian":
 					translate_lang = 'rus'
+				if lessonLang == "French":
+					translate_lang = 'fra'
 
 				#saves json from pdf method
 				if up_method == 'PDF':
@@ -82,7 +85,7 @@ def import_page(request):
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json )
 					newlesson.save()
 				#loads this page without youtube url selected
-				return render(request, 'langImport/import.html', {'userLang' : userLang , 'authorName' : authorName, 'yturl' : yturl})
+				return render(request, 'langImport/import.html', {'up_public' : up_public , 'up_public' : up_public, 'yturl' : yturl})
 			else:
 				if userLang == "English":
 					native_lang = 'en'
