@@ -28,10 +28,28 @@ def image_to_string(image_file, imageLang):
 
 
 def string_to_json_format(lesson_string, target_lang, native_lang):
+   
     lesson_string = remove_control_characters(lesson_string)
     lesson_string = lesson_string.replace("\n", " ")
     lesson_string = lesson_string.replace("- ", '')
+    lesson_string = lesson_string.replace("-", '')
     lesson_string = lesson_string.replace("\\", '')
+    lesson_string = lesson_string.replace(", ", " ")
+    lesson_string = lesson_string.replace("«", "")
+    lesson_string = lesson_string.replace("»", "")
+    lesson_string = lesson_string.replace("›", "")
+    lesson_string = lesson_string.replace("©", "")
+    lesson_string = lesson_string.replace("„", "")
+    lesson_string = lesson_string.lower()
+    
+    #removes extra spaces within the text
+    count = 0
+    for x in lesson_string:
+        if x == " ":
+            count = count + 1
+        if x != " " and count != 0:
+
+            lesson_string = lesson_string.replace(" " * count, " ")
     lesson_string = lesson_string.split(". ")
 
     for m in lesson_string:
@@ -92,18 +110,37 @@ def string_to_json(json_string):
 
 # pass video code, target language and native language to create a json file
 def youtube_to_json(urlString, targetLang, nativeLang):
+    # video_id = urlString
+    # transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=[targetLang, nativeLang])
+
+    # transcript = str(transcript)
+
+    # new = transcript.replace('"', '')  # removes double quotes
+    # new = new.replace("'", '"')  # replaces single quotes with double quotes
+    
+
+    # new_string = new.replace('\\xa0', '')  # removes \\XaO
+    # new_string = new_string.replace('\\n', ' ')  # replaces \n with a space
+    # new_string = json.loads(new_string)
+    # return json.dumps(new_string, ensure_ascii=False)
+
     video_id = urlString
     transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=[targetLang, nativeLang])
 
     transcript = str(transcript)
-
-    new = transcript.replace('"', '')  # removes double quotes
-    new = new.replace("'", '"')  # replaces single quotes with double quotes
     
 
-    new_string = new.replace('\\xa0', '')  # removes \\XaO
-    new_string = new_string.replace('\\n', ' ')  # replaces \n with a space
-    new_string = json.loads(new_string)
+
+    for x in transcript:
+        transcript = transcript.replace("'text'", '"text"')
+        transcript = transcript.replace("'start'", '"start"')
+        transcript = transcript.replace("'duration'", '"duration"')
+        transcript = transcript.replace(" '", ' "')
+        transcript = transcript.replace("',", '",')
+   
+
+    new_string = json.loads(transcript)
+
     return json.dumps(new_string, ensure_ascii=False)
 
     

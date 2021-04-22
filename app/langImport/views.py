@@ -11,6 +11,7 @@ from .models import Genre
 from .models import Language
 from .forms import EditForm
 from django.urls import reverse_lazy
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -25,6 +26,8 @@ class LessonView(ListView):
 class ReadView(DetailView):
 	model = Lesson
 	template_name = 'langImport/read.html'
+	
+
 
 def settings(request):
 	return render(request, 'langImport/settings.html', {})
@@ -64,37 +67,62 @@ def import_page(request):
 				yturl = 'no url'
 
 				#sets the language references for supported languages
+				if userLang == "English":
+					native_lang = 'en'
+				if userLang == "Russian":
+					native_lang = 'rus'
+				if userLang == "Spanish":
+					native_lang = 'spa'
+				if userLang == "French":
+					native_lang = 'fra'
 				if lessonLang == "Russian":
 					translate_lang = 'rus'
 				if lessonLang == "French":
 					translate_lang = 'fra'
+				if lessonLang == "Spanish":
+					translate_lang = 'spa'
+				if lessonLang == "English":
+					translate_lang = 'en'
 
 				#saves json from pdf method
 				if up_method == 'PDF':
-					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.pdf_to_string('media/' + filename, translate_lang), lessonLang, 'English'))))
+					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.pdf_to_string('media/' + filename, translate_lang), lessonLang, userLang))))
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 					newlesson.save()
 				#saves json from text file
 				elif up_method == 'Text File':
-					lesson_json = IM.text_to_string('media/' + filename, lessonLang, 'English')
+					lesson_json = IM.text_to_string('media/' + filename, lessonLang, userLang)
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 					newlesson.save()
 				#saves json from image
 				elif up_method == 'Image':
-					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.image_to_string('media/' + filename, translate_lang), lessonLang, 'English'))))
+					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.image_to_string('media/' + filename, translate_lang), lessonLang, userLang))))
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json )
 					newlesson.save()
 				#loads this page without youtube url selected
 				return render(request, 'langImport/import.html', {'up_public' : up_public , 'up_public' : up_public, 'yturl' : yturl})
 			else:
+				#sets the language references for supported languages for YouTube URLs
 				if userLang == "English":
 					native_lang = 'en'
+				if userLang == "Russian":
+					native_lang = 'ru'
+				if userLang == "Spanish":
+					native_lang = 'es'
+				if userLang == "French":
+					native_lang = 'fr'
 				if lessonLang == "Russian":
 					translate_lang = 'ru'
+				if lessonLang == "English":
+					translate_lang = 'en'
+				if lessonLang == 'Spanish':
+					translate_lang = 'es'
+				if lessonLang == "French":
+					translate_lang = 'fr'
 
 				#saves json from youtube url
 				yturl = request.POST['yturl']
-				lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, translate_lang )
+				lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, native_lang )
 				newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 				newlesson.save()
 				#loads this page when youtube url is selected
