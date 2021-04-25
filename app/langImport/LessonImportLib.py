@@ -130,3 +130,25 @@ def extract_id(url):
         return query.path[1:]
     else:
         raise ValueError
+
+# pass a string, the native language and target language to get the translated text
+def translate_string(target_string, native_lang, target_lang):
+    translated_text = translator(target_lang, native_lang, target_string)
+    print(translated_text[0][0][0])
+    return translated_text
+
+#finds all the language codes that need to be translated to
+def find_all_to_translate(native_lang):
+    language_codes = ['en', 'ru', 'fr', 'es']
+    codes_to_translate = []
+    for x in language_codes:
+        if x == native_lang:
+            pass
+        else:
+            codes_to_translate.append(x)
+    return codes_to_translate
+
+#translates a word in all available lanuages
+def translate_to_all(target_string, native_lang, lang_codes):
+    for x in lang_codes:
+        translate_string(target_string, native_lang, x)

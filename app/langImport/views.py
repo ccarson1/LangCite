@@ -12,6 +12,8 @@ from .models import Language
 from .forms import EditForm
 from django.urls import reverse_lazy
 from django.http import HttpResponse
+from django.http import JsonResponse
+
 
 
 # Create your views here.
@@ -23,9 +25,20 @@ class HomeView(ListView):
 class LessonView(ListView):
 	model = Lesson
 	template_name = 'langImport/lessons.html'
+
 class ReadView(DetailView):
 	model = Lesson
 	template_name = 'langImport/read.html'
+
+	def post(self, request, pk):
+		btn_word = request.POST.get('btn_word')
+		print(btn_word)
+		print(pk)
+		if request.is_ajax():
+
+			# native_word = IM.translate_string(btn_word, 'en', 'ru')
+			return JsonResponse({'native_word' : native_word}, status=200)
+		return render(request, 'langImport/read.html' )
 	
 
 
@@ -86,17 +99,17 @@ def import_page(request):
 
 				#saves json from pdf method
 				if up_method == 'PDF':
-					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.pdf_to_string('media/' + filename, translate_lang), lessonLang, userLang))))
+					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.pdf_to_string('media/' + filename, translate_lang), lessonLang, userLang, up_method))))
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 					newlesson.save()
 				#saves json from text file
 				elif up_method == 'Text File':
-					lesson_json = IM.text_to_string('media/' + filename, lessonLang, userLang)
+					lesson_json = IM.text_to_string('media/' + filename, lessonLang, userLang, up_method)
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 					newlesson.save()
 				#saves json from image
 				elif up_method == 'Image':
-					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.image_to_string('media/' + filename, translate_lang), lessonLang, userLang))))
+					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.image_to_string('media/' + filename, translate_lang), lessonLang, userLang, up_method))))
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json )
 					newlesson.save()
 				#loads this page without youtube url selected

@@ -10,6 +10,8 @@ import unicodedata
 from youtube_transcript_api import YouTubeTranscriptApi
 from pdf2image import convert_from_path
 import os
+from translate import translator
+
 try:
     # python 3
     from urllib.parse import urlparse, parse_qs
@@ -27,7 +29,7 @@ def image_to_string(image_file, imageLang):
     return image_string
 
 
-def string_to_json_format(lesson_string, target_lang, native_lang):
+def string_to_json_format(lesson_string, target_lang, native_lang, up_method):
    
     lesson_string = remove_control_characters(lesson_string)
     lesson_string = lesson_string.replace("\n", " ")
@@ -57,13 +59,13 @@ def string_to_json_format(lesson_string, target_lang, native_lang):
             n.replace("/,", "")
             
 
-    new_json = '{"lesson_sentences":['
+    new_json = '{"up_method": "'+ up_method + '", "target_lang": "'+ target_lang + '", "native_lang": "'+ native_lang +'", "lesson_sentences":['
 
     count = 1
     w_count = 0
     for i in lesson_string:
         new_string = i.split(" ")
-        new_json = new_json + '{"sentence_' + str(count)
+        new_json = new_json + '{"sentence_'
         count = count + 1
         new_json = new_json + '":['
         sent_count = 0
@@ -83,67 +85,27 @@ def string_to_json_format(lesson_string, target_lang, native_lang):
 
     return new_json
 
-
-
-
-
-    # new_json = ''
-    #
-    # for x in lesson_string:
-    #     k = x.split(" ")
-    #     for y in k:
-    #
-    #         nj = "{'" + target_lang + "':" + "'" + y + "','" + native_lang + "':" + "'" + "' },"
-    #         print(nj)
-    #         new_json = new_json + nj
-    #
-    # new_json = new_json.rstrip(new_json[-1])
-    # new_json = "{'lesson_words': [" + new_json + "]}"
-    # new_json = new_json.replace("'", '"')  # replaces single quotes with double quotes
-
-    # print(new_json)
-    # new_json = json.loads(new_json)
-    # return json.dumps(new_json, ensure_ascii=False)
 def string_to_json(json_string):
     json_format = json.loads(json_string)
     return json.dumps(json_format, ensure_ascii=False)
 
 # pass video code, target language and native language to create a json file
 def youtube_to_json(urlString, targetLang, nativeLang):
-    # video_id = urlString
-    # transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=[targetLang, nativeLang])
-
-    # transcript = str(transcript)
-
-    # new = transcript.replace('"', '')  # removes double quotes
-    # new = new.replace("'", '"')  # replaces single quotes with double quotes
-    
-
-    # new_string = new.replace('\\xa0', '')  # removes \\XaO
-    # new_string = new_string.replace('\\n', ' ')  # replaces \n with a space
-    # new_string = json.loads(new_string)
-    # return json.dumps(new_string, ensure_ascii=False)
 
     video_id = urlString
     transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=[targetLang, nativeLang])
-
     transcript = str(transcript)
     
-
-
     for x in transcript:
         transcript = transcript.replace("'text'", '"text"')
         transcript = transcript.replace("'start'", '"start"')
         transcript = transcript.replace("'duration'", '"duration"')
         transcript = transcript.replace(" '", ' "')
         transcript = transcript.replace("',", '",')
-   
 
     new_string = json.loads(transcript)
 
     return json.dumps(new_string, ensure_ascii=False)
-
-    
 
 # converts a pdf to image then image to string
 # depends on image_to_string method to work!!!
@@ -204,3 +166,25 @@ def extract_id(url):
         return query.path[1:]
     else:
         raise ValueError
+
+# pass a string, the native language and target language to get the translated text
+def translate_string(target_string, native_lang, target_lang):
+    translated_text = translator(target_lang, native_lang, target_string)
+    print(translated_text[0][0][0])
+    return translated_text[0][0][0]
+
+#finds all the language codes that need to be translated to
+def find_all_to_translate(native_lang):
+    language_codes = ['en', 'ru', 'fr', 'es']
+    codes_to_translate = []
+    for x in language_codes:
+        if x == native_lang:
+            pass
+        else:
+            codes_to_translate.append(x)
+    return codes_to_translate
+
+#translates a word in all available lanuages
+def translate_to_all(target_string, native_lang, lang_codes):
+    for x in lang_codes:
+        translate_string(target_string, native_lang, x)
