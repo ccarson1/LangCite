@@ -1,5 +1,5 @@
  
-// sets the input as a file uploader or a text input
+// sets the input as a file uploader or a text input on the form
 
 document.getElementById("flexRadioDefault4").addEventListener("click", function(){
 	document.getElementById("fileChoice").style.display = "none";

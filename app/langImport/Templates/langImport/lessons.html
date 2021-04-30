@@ -8,24 +8,27 @@
 	<div class="row row-cols-1 row-cols-md-3 g-4 mt-5 " >
 	{% for lesson in object_list %}
 		
-		
-		
-	  <div class="col" >
+			 <div class="col" >
 	  	
-	    <div class="card h-100 card text-white bg-primary mb-3">
-	      <img src="{% static 'langImport/img/oldman.jpg' %}" class="card-img-top" alt="...">
-	      <div class="card-body">
-	        <h5 class="card-title" >{{ lesson.lesson_title }}</h5>
-	        
-	      </div>
-	      <div class="card-footer">
-	        <small class="text-muted">By : {{ lesson.user_id }}</small>
-	        <a class="btn btn-success" href="{% url 'web-read' lesson.pk %}">Read</a>
-	        <a type="button" class="btn btn-outline-success" href="{% url 'edit-lesson' lesson.pk %}">Edit</a>
-	        <a type="button" class="btn btn-outline-success" href="{% url 'delete-lesson' lesson.pk %}">Delete</a>
-	      </div>
-	    </div>
-	  </div>
+			    <div class="card h-100  mb-3">
+			      <img src="{% static 'langImport/img/oldman.jpg' %}" class="card-img-top" alt="...">
+			      <div class="card-body">
+			        <h5 class="card-title" >{{ lesson.lesson_title }}</h5>
+			        <small class="text-muted">By : {{ lesson.user_id }}</small><br/>
+			        <small class="text-muted">Language : {{ lesson.language_id }}</small>
+			      </div>
+			      <div class="card-footer">
+			        
+			        <a class="btn btn-primary" href="{% url 'web-read' lesson.pk %}">Read</a>
+			        <a type="button" class="btn btn-outline-primary" href="{% url 'edit-lesson' lesson.pk %}">Edit</a>
+			        <a type="button" class="btn btn-outline-primary" href="{% url 'delete-lesson' lesson.pk %}">Delete</a>
+			      </div>
+			    </div>
+			  </div>
+	
+	
+		
+	 
 	{% endfor %}
 	</div>
 

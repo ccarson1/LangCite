@@ -1,13 +1,17 @@
 {% extends "langImport/base.html" %}
 {% load static %}
 {% block content %}
-
+{% csrf_token %}
 {% if lesson.public == False %}
-	{% if user.is_authenticated %}
 
+	{% if user.is_authenticated %}
+	
+		
 		<h1 class="mt-5">Read</h1>
 		<h1>{{  lesson.lesson_title }}</h1>
-		<p >{{ lesson.json_file }}</p>
+		<p>{{ lesson.up }}</p>
+
+		<div id="json_lesson" >{{ lesson.json_file }}</div>
 
 
 
@@ -18,9 +22,9 @@
 {% else %}
 	<h1 class="mt-5">Read</h1>
 	<h1>{{  lesson.lesson_title }}</h1>
-	<p >{{ lesson.json_file }}</p>
+	<div id="json_lesson" >{{ lesson.json_file }}</div>
 
 {% endif %}
-		
+
 <script type="text/javascript" src="{% static 'langImport/js/read.js' %}"></script>
 {% endblock content %}
