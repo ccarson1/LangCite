@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-	<div class="m-5">
+	<div class="container m-5">
 		<form class="d-flex flex-row-reverse">
 	        <input class="form-control me-5" type="search" placeholder="Search" style="width: 300px;" aria-label="Search">
 	        <button class="btn btn-outline-success me-5" type="submit">Search</button>
@@ -25,6 +25,7 @@
 				  <small class="text-muted">Language : {{ lesson.language_id }}</small><br/>
 				  <a class="btn btn-primary m-auto" style="width: 200px;" href="{% url 'web-read' lesson.pk %}">Read</a>
 			 </div>
+	
 			{% endif %}
 		{% endfor %}
 	

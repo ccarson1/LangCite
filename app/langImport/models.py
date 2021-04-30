@@ -85,50 +85,17 @@ class SpanishWord(models.Model):
 # technically these dictionary tables are "above" the word lists in the hierarchy, but they have to be first since
 # they need references to the word lists
 # English dictionary
-class Edictionary(models.Model):
+class Tdictionary(models.Model):
     translation_id = models.AutoField
-    word_id = models.ForeignKey(EnglishWord, on_delete=models.CASCADE)
-    spa_id = models.ForeignKey(SpanishWord, on_delete=models.CASCADE, related_name="en_lang1")
-    ru_id = models.ForeignKey(RussianWord, on_delete=models.CASCADE, related_name="en_lang2")
-    fr_id = models.ForeignKey(FrenchWord, on_delete=models.CASCADE, related_name="en_lang3")
+    en_id = models.ForeignKey(EnglishWord, on_delete=models.CASCADE, related_name="lang1")
+    spa_id = models.ForeignKey(SpanishWord, on_delete=models.CASCADE, related_name="lang2")
+    ru_id = models.ForeignKey(RussianWord, on_delete=models.CASCADE, related_name="lang3")
+    fr_id = models.ForeignKey(FrenchWord, on_delete=models.CASCADE, related_name="lang4")
 
     def __str__(self):
         return str(self.word_id)
 
 
-# Russian dictionary
-class Rdictionary(models.Model):
-    translation_id = models.AutoField
-    word_id = models.ForeignKey(RussianWord, on_delete=models.CASCADE)
-    en_id = models.ForeignKey(EnglishWord, on_delete=models.CASCADE, related_name="ru_lang1")
-    spa_id = models.ForeignKey(SpanishWord, on_delete=models.CASCADE, related_name="ru_lang2")
-    fr_id = models.ForeignKey(FrenchWord, on_delete=models.CASCADE, related_name="ru_lang3")
 
-    def __str__(self):
-        return str(self.word_id)
-
-
-# French dictionary
-class Fdictionary(models.Model):
-    translation_id = models.AutoField
-    word_id = models.ForeignKey(FrenchWord, on_delete=models.CASCADE)
-    en_id = models.ForeignKey(EnglishWord, on_delete=models.CASCADE, related_name="fr_lang1")
-    spa_id = models.ForeignKey(SpanishWord, on_delete=models.CASCADE, related_name="fr_lang2")
-    ru_id = models.ForeignKey(RussianWord, on_delete=models.CASCADE, related_name="fr_lang3")
-
-    def __str__(self):
-        return str(self.word_id)
-
-
-# Spanish dictionary
-class Sdictionary(models.Model):
-    translation_id = models.AutoField
-    word_id = models.ForeignKey(SpanishWord, on_delete=models.CASCADE)
-    en_id = models.ForeignKey(EnglishWord, on_delete=models.CASCADE, related_name="spa_lang1")
-    ru_id = models.ForeignKey(RussianWord, on_delete=models.CASCADE, related_name="spa_lang2")
-    fr_id = models.ForeignKey(FrenchWord, on_delete=models.CASCADE, related_name="spa_lang3")
-
-    def __str__(self):
-        return str(self.word_id)
 
 

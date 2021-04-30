@@ -49,6 +49,25 @@ function checkNativeCookie() {
   }
   
 }
+// function logSubmit(event) {
+//   var content = `Form Submitted! Time stamp: ${event.timeStamp}`;
+//   console.log(content);
+//   event.preventDefault();
+// }
+
+// const form = document.getElementById('form');
+// document.getElementById("spinner").display = block;
+// form.addEventListener('submit', logSubmit);
+
+// document.getElementById("btn_upload").addEventListener("click", function(){
+
+// 	$('#spinner').show();
+
+// });
+
+// function spinner(){
+// 	alert("import");
+// }
 
 function NoTargetLanguageError(){
 	var NLV = document.getElementById("noLangVal");
@@ -66,6 +85,8 @@ function NoNativeLanguageError(){
 		NLV.className = "alert alert-light";
 	}
 }
+
+
 NoTargetLanguageError();
 NoNativeLanguageError();
 checkCookie();
