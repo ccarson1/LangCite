@@ -57,7 +57,11 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+
+        'DIRS': [os.path.join("/home/kira/.git-repos/LangCite/app/langImport", 'Templates')],
+
         'DIRS': [os.path.join("/app/langImport", 'Templates')],
+
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
