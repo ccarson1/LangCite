@@ -32,10 +32,12 @@ class ReadView(DetailView):
 
 	def post(self, request, pk):
 		btn_word = request.POST.get('btn_word')
+		btn_target = request.POST.get('btn_target')
+		btn_native = request.POST.get('btn_native')
 		print(btn_word)
 		print(pk)
 		if request.is_ajax():
-			native_word = btn_word;
+			native_word = btn_word + "/" + btn_target + "/" + btn_native;
 			# native_word = IM.translate_string(btn_word, 'en', 'fr')
 			return JsonResponse({'native_word' : native_word}, status=200)
 		return render(request, 'langImport/read.html' )

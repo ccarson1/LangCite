@@ -6,10 +6,8 @@ from .models import EnglishWord
 from .models import RussianWord
 from .models import SpanishWord
 from .models import FrenchWord
-from .models import Edictionary
-from .models import Rdictionary
-from .models import Fdictionary
-from .models import Sdictionary
+from .models import Tdictionary
+
 
 
 admin.site.register(Lesson)
@@ -19,7 +17,5 @@ admin.site.register(EnglishWord)
 admin.site.register(RussianWord)
 admin.site.register(SpanishWord)
 admin.site.register(FrenchWord)
-admin.site.register(Edictionary)
-admin.site.register(Rdictionary)
-admin.site.register(Fdictionary)
-admin.site.register(Sdictionary)
+admin.site.register(Tdictionary)
+

@@ -177,6 +177,8 @@ for(var i =0; i < document.getElementsByClassName("btn btn-light").length; i++){
 			url: path,
 			data: {
 				'btn_word': btn_word,
+				'btn_target': store_json.target_lang,
+				'btn_native': store_json.native_lang,
 				'csrfmiddlewaretoken': csrf
 			},
 			success: function(response){
