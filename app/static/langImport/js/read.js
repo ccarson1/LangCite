@@ -61,7 +61,7 @@ function populate_words(){
 				
 				for(j=0; j < store_json.lesson_sentences[position].sentence_.length; j++){
 					
-					createReadButtons(store_json.lesson_sentences[position].sentence_[j].Russian, j, i)
+					createReadButtons(store_json.lesson_sentences[position].sentence_[j].Russian, j, position)
 				}
 				
 			}
@@ -73,7 +73,7 @@ function populate_words(){
 				
 				for(j=0; j < store_json.lesson_sentences[position].sentence_.length; j++){
 
-					createReadButtons(store_json.lesson_sentences[position].sentence_[j].French, j, i)
+					createReadButtons(store_json.lesson_sentences[position].sentence_[j].French, j, position)
 					
 				}		
 			}
@@ -83,7 +83,7 @@ function populate_words(){
 				// console.log(store_json.lesson_sentences[i].sentence_.length)
 				for(j=0; j < store_json.lesson_sentences[position].sentence_.length; j++){
 
-					createReadButtons(store_json.lesson_sentences[position].sentence_[j].Spanish, j, i)
+					createReadButtons(store_json.lesson_sentences[position].sentence_[j].Spanish, j, position)
 					
 				}	
 			}
@@ -95,7 +95,7 @@ function populate_words(){
 				// console.log(store_json.lesson_sentences[i].sentence_.length)
 				for(j=0; j < store_json.lesson_sentences[position].sentence_.length; j++){
 					
-					createReadButtons(store_json.lesson_sentences[position].sentence_[j].English, j, i)
+					createReadButtons(store_json.lesson_sentences[position].sentence_[j].English, j, position)
 				}
 			}
 		}
@@ -169,9 +169,46 @@ function createReadButtons(word, word_pos, sent_pos){
 			if(store_json.up_method == "PDF" || store_json.up_method == "Text File" || store_json.up_method == "Image" || store_json.up_method == "Youtube url"){
 				
 				bust = this.id.split("_");
-				// console.log("sentence " + bust[0] + " on word " + bust[1] + " = " + store_json.lesson_sentences[bust[0]].sentence_[bust[1]].English);
+				console.log("sentence " + bust[0] + " on word " + bust[1] + " = " + store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Russian);
 				
-				document.getElementById("target_def").innerHTML = bust;
+				// document.getElementById("target_def").innerHTML = bust;
+				if(store_json.native_lang == 'English'){
+					var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].English;
+					if(en_word != ""){
+						document.getElementById("target_def").innerHTML = en_word;
+					}
+					else{
+						document.getElementById("target_def").innerHTML = "";
+					}
+				}
+				if(store_json.native_lang == 'Russian'){
+					var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Russian;
+					if(en_word != ""){
+						document.getElementById("target_def").innerHTML = en_word;
+					}
+					else{
+						document.getElementById("target_def").innerHTML = "";
+					}
+				}
+				if(store_json.native_lang == 'French'){
+					var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].French;
+					if(en_word != ""){
+						document.getElementById("target_def").innerHTML = en_word;
+					}
+					else{
+						document.getElementById("target_def").innerHTML = "";
+					}
+				}
+				if(store_json.native_lang == 'Spanish'){
+					var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Spanish;
+					if(en_word != ""){
+						document.getElementById("target_def").innerHTML = en_word;
+					}
+					else{
+						document.getElementById("target_def").innerHTML = "";
+					}
+				}
+
 			}else{
 				console.log("sentence " + bust[0] + " on word " + bust[1] + " = " );
 			}
@@ -179,31 +216,33 @@ function createReadButtons(word, word_pos, sent_pos){
 			
 			
 
+			if(document.getElementById("target_def").innerHTML == ""){
+				$.ajax({
+					type: "POST",
+					url: path,
+					data: {
+						'btn_word': btn_word,
+						'btn_target': store_json.target_lang,
+						'btn_native': store_json.native_lang,
+						'csrfmiddlewaretoken': csrf
+					},
+					success: function(response){
+						console.log(response.native_word);
+						new_word = response.native_word;
 
-			$.ajax({
-				type: "POST",
-				url: path,
-				data: {
-					'btn_word': btn_word,
-					'btn_target': store_json.target_lang,
-					'btn_native': store_json.native_lang,
-					'csrfmiddlewaretoken': csrf
-				},
-				success: function(response){
-					console.log(response.native_word);
-					new_word = response.native_word;
-
-					var w = new Date();
-					w.setTime(w.getTime() + (1*24*60*60*1000));
-					var expires = "expires="+ w.toUTCString();
-					document.cookie = "trans_word=" + new_word + ";" + expires + ";path=/";
-					
-					
-					
-				}
+						var w = new Date();
+						w.setTime(w.getTime() + (1*24*60*60*1000));
+						var expires = "expires="+ w.toUTCString();
+						document.cookie = "trans_word=" + new_word + ";" + expires + ";path=/";
+						document.getElementById("target_def").innerHTML = new_word;
+						
+						
+					}
 
 
-			});
+				});
+			}
+			
 			
 			new_word = getCookie("trans_word");
 			///set second parameter with the defition from server////
