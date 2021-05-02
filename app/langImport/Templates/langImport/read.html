@@ -8,7 +8,7 @@
 	
 		<div class="container text-center">
 			<h1 class="mt-5 ">Read Lesson</h1>
-			<h1>{{  lesson.lesson_title }}</h1>
+			<h1 id="lesson_title">{{  lesson.lesson_title }}</h1>
 		</div>
 
 
@@ -21,16 +21,17 @@
 			  <label class="btn btn-outline-primary" for="btnradio2">Paragraph</label>
 
 			</div>
+			
 			<div class="container mt-5">
-			  <div class="row justify-content-md-center">
+			  <div class="row ">
 			    <div class="col col-lg-2">
-			      <button type="button" class="btn btn-primary" style="float: right;">Prev</button>
+			      <button type="button" class="btn btn-primary" id="btn_left" style="float: left;">Prev</button>
+			    </div>
+			    <div class="col col-lg-8">
+			      <div class="progress-bar progress-bar " id="read_bar" style="width:1%">1%</div>
 			    </div>
 			    <div class="col col-lg-2">
-			      <div class="progress-bar progress-bar " style="width:90%">10%</div>
-			    </div>
-			    <div class="col col-lg-2">
-			     <button type="button" class="btn btn-primary">Next</button>
+			     <button type="button" class="btn btn-primary" id="btn_right" style="float: right;">Next</button>
 			    </div>
 			  </div>
 			</div>
@@ -38,15 +39,7 @@
 				
 				<div id="json_lesson" class="mt-5">{{ lesson.json_file }}</div>
 
-			<!-- 	<div id="footerSlideContainer">
-				   
-					<div id="footerSlideContent">
-						<div id="footerSlideText">
-							<h3>Hey! I'm a Sliding Footer</h3>
-							
-						</div>
-					</div>
-				</div> -->
+
 				<div class="card " style="position: fixed; bottom:0; width: 100%;" data-bs-spy="scroll">
 				  <div class="card-header">
 				    <ul class="nav nav-tabs card-header-tabs">
@@ -66,24 +59,13 @@
 				    <ul class="list-group list-group-flush" >
 					  <li class="list-group-item" id="target_def"></li>
 					 
-					  <li class="list-group-item">
+<!-- 					  <li class="list-group-item">
 					 	 <input class="mt-2"type="" name="">
 				     	 <a href="#" class="btn btn-primary mt-2">Save</a>
-					  </li>
+					  </li> -->
 					</ul>
 
-				<!-- 	<div data-bs-spy="scroll" data-bs-target="#def" data-bs-offset="0" tabindex="0">
-					  <h4 id="fat">@fat</h4>
-					  <p>...</p>
-					  <h4 id="mdo">@mdo</h4>
-					  <p>...</p>
-					  <h4 id="one">one</h4>
-					  <p>...</p>
-					  <h4 id="two">two</h4>
-					  <p>...</p>
-					  <h4 id="three">three</h4>
-					  <p>...</p>
-					</div> -->
+
 
 				  </div>
 				  
@@ -102,7 +84,7 @@
 
 		<div class="container text-center">
 		<h1 class="mt-5 ">Read Lesson</h1>
-		<h1>{{  lesson.lesson_title }}</h1>
+		<h1 id="lesson_title">{{  lesson.lesson_title }}</h1>
 		</div>
 
 
@@ -124,13 +106,13 @@
 			<div class="container mt-5">
 			  <div class="row ">
 			    <div class="col col-lg-2">
-			      <button type="button" class="btn btn-primary" style="float: left;">Prev</button>
+			      <button type="button" class="btn btn-primary" id="btn_left" style="float: left;">Prev</button>
 			    </div>
 			    <div class="col col-lg-8">
-			      <div class="progress-bar progress-bar " style="width:10%">10%</div>
+			      <div class="progress-bar progress-bar " id="read_bar" style="width:1%">1%</div>
 			    </div>
 			    <div class="col col-lg-2">
-			     <button type="button" class="btn btn-primary" style="float: right;">Next</button>
+			     <button type="button" class="btn btn-primary" id="btn_right" style="float: right;">Next</button>
 			    </div>
 			  </div>
 			</div>
@@ -159,10 +141,10 @@
 				    <ul class="list-group list-group-flush" >
 					  <li class="list-group-item" id="target_def"></li>
 					 
-					  <li class="list-group-item">
+					  <!-- <li class="list-group-item">
 					 	 <input class="mt-2"type="" name="">
 				     	 <a href="#" class="btn btn-primary mt-2">Save</a>
-					  </li>
+					  </li> -->
 					</ul>
 
 
