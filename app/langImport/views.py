@@ -131,7 +131,7 @@ def import_page(request):
 
 				#saves json from youtube url
 				yturl = request.POST['yturl']
-				lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, native_lang )
+				lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, native_lang, up_title )
 				newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 				newlesson.save()
 				#loads this page when youtube url is selected

@@ -46,9 +46,16 @@ function set_mode(mode){
 
 function populate_words(){
 	position = getCookie("read_page");
+	pos = position.split("_")
+	console.log(pos[1]);
+
 	if(position == ""){
-		position = 0;
+		pos[0] = 0;
 	}
+	if(store_json.up_title != pos[1] || store_json.uptitle == "undefined"){
+		pos[0] = 0;
+	}
+
 
 	
 
@@ -59,9 +66,10 @@ function populate_words(){
 		if(store_json.target_lang == "Russian"){
 			for(i = 0; i < sentence_num; i++){
 				
-				for(j=0; j < store_json.lesson_sentences[position].sentence_.length; j++){
+				for(j=0; j < store_json.lesson_sentences[pos[0]].sentence_.length; j++){
 					
-					createReadButtons(store_json.lesson_sentences[position].sentence_[j].Russian, j, position)
+					createReadButtons(store_json.lesson_sentences[pos[0]].sentence_[j].Russian, j, pos[0])
+
 				}
 				
 			}
@@ -71,9 +79,9 @@ function populate_words(){
 		if(store_json.target_lang == "French"){
 			for(i = 0; i < sentence_num; i++){
 				
-				for(j=0; j < store_json.lesson_sentences[position].sentence_.length; j++){
+				for(j=0; j < store_json.lesson_sentences[pos[0]].sentence_.length; j++){
 
-					createReadButtons(store_json.lesson_sentences[position].sentence_[j].French, j, position)
+					createReadButtons(store_json.lesson_sentences[pos[0]].sentence_[j].French, j, pos[0])
 					
 				}		
 			}
@@ -81,9 +89,9 @@ function populate_words(){
 		if(store_json.target_lang == "Spanish"){
 			for(i = 0; i < sentence_num; i++){
 				// console.log(store_json.lesson_sentences[i].sentence_.length)
-				for(j=0; j < store_json.lesson_sentences[position].sentence_.length; j++){
+				for(j=0; j < store_json.lesson_sentences[pos[0]].sentence_.length; j++){
 
-					createReadButtons(store_json.lesson_sentences[position].sentence_[j].Spanish, j, position)
+					createReadButtons(store_json.lesson_sentences[pos[0]].sentence_[j].Spanish, j, pos[0])
 					
 				}	
 			}
@@ -93,9 +101,9 @@ function populate_words(){
 			for(i = 0; i < sentence_num; i++){
 				
 				// console.log(store_json.lesson_sentences[i].sentence_.length)
-				for(j=0; j < store_json.lesson_sentences[position].sentence_.length; j++){
+				for(j=0; j < store_json.lesson_sentences[pos[0]].sentence_.length; j++){
 					
-					createReadButtons(store_json.lesson_sentences[position].sentence_[j].English, j, position)
+					createReadButtons(store_json.lesson_sentences[pos[0]].sentence_[j].English, j, pos[0])
 				}
 			}
 		}
@@ -291,7 +299,7 @@ btn_left.addEventListener("click", function(){
 	var d = new Date();
 	d.setTime(d.getTime() + (1*24*60*60*1000));
 	var expires = "expires="+ d.toUTCString();
-	document.cookie ="read_page=" + read_page + ";" + expires + ";path=/";
+	document.cookie ="read_page=" + read_page + "_" + n +  ";" + expires + ";path=/";
 
 	populate_words();
 });
@@ -320,7 +328,7 @@ btn_right.addEventListener("click", function(){
 	var d = new Date();
 	d.setTime(d.getTime() + (1*24*60*60*1000));
 	var expires = "expires="+ d.toUTCString();
-	document.cookie = "read_page=" + read_page + ";" + expires + ";path=/";
+	document.cookie = "read_page=" + read_page + "_" + n + ";" + expires + ";path=/";
 
 	populate_words();
 });

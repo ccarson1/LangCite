@@ -91,7 +91,7 @@ def string_to_json(json_string):
     return json.dumps(json_format, ensure_ascii=False)
 
 # pass video code, target language and native language to create a json file
-def youtube_to_json(urlString, targetLang, nativeLang):
+def youtube_to_json(urlString, targetLang, nativeLang, up_title):
 
     up_method = 'Youtube url'
     video_id = urlString
@@ -132,7 +132,7 @@ def youtube_to_json(urlString, targetLang, nativeLang):
     new_string = json.loads(transcript)
 
 
-    new_json = '{"up_method": "'+ up_method + '", "target_lang": "'+ targetLang + '", "native_lang": "'+ nativeLang +'", "lesson_sentences":['
+    new_json = '{ "up_title": "'+ up_title + '", "up_method": "'+ up_method + '", "target_lang": "'+ targetLang + '", "native_lang": "'+ nativeLang +'", "lesson_sentences":['
     w_count = 0;
     for x in new_string:
         sent_count = 0;
@@ -158,6 +158,8 @@ def youtube_to_json(urlString, targetLang, nativeLang):
     print(type(new_json))
     new_json = json.loads(new_json)
     print(type(new_json))
+
+    # new_json = json.loads(new_json)
     
     
     return json.dumps(new_json, ensure_ascii=False)

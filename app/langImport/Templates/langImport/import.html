@@ -22,7 +22,7 @@
 			<div class="card m-auto mt-3">
 			  <div class="card-body" >
 			    <p >Author :<input id="authorName" name="authorName" value='{{ user.username }}' style="float: right; border: none;" readonly ></input></p required>
-			    <p >Native  : <input id="userLang" name="userLang" value="" style="float: right; border: none;" readonly required>  </input></p >
+			    <p >Native  : <input id="userLang" name="userLang" value="" style="float: right; border: none;" onload="checkTarget();" readonly required>  </input></p >
 
 			<!--     <label class="mt-3">Native Language</label>
 			  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg "  id="userLang" name="userLang" required>
@@ -33,7 +33,7 @@
 				  <option value="French">Comedy</option>
 				  
 			  </select> -->
-			    <p>Target  : <input id="lessonLang" name="lessonLang" value="" style="float: right; border: none;" readonly>  </input></p required>
+			    <p>Target  : <input id="lessonLang" name="lessonLang" value="" style="float: right; border: none;"  readonly>  </input></p required>
 			  </div>
 			 <!--    <label class="mt-3">Target Language</label>
 			  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg "  id="lessonLang" name="lessonLang" required>
@@ -100,6 +100,7 @@
 						</div>
 			</div>
 			<button  type="submit" class="btn btn-primary mt-3"  style="width: 200px;" id="btn_upload">Create</button>
+
 			
 		</form>
 		
