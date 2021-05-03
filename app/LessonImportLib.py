@@ -34,7 +34,7 @@ def image_to_string(image_file, imageLang):
     return image_string
 
 
-def string_to_json_format(lesson_string, target_lang, native_lang, up_method):
+def string_to_json_format(lesson_string, target_lang, native_lang, up_method, up_title):
     lesson_string = remove_control_characters(lesson_string)
     lesson_string = lesson_string.replace("\n", " ")
     lesson_string = lesson_string.replace("- ", '')
@@ -61,7 +61,7 @@ def string_to_json_format(lesson_string, target_lang, native_lang, up_method):
         for n in m:
             n.replace("/,", "")
 
-    new_json = '{"up_method": "' + up_method + '", "target_lang": "' + target_lang + '", "native_lang": "' + native_lang + '", "lesson_sentences":['
+    new_json = '{"up_title": "'+ up_title + '", "up_method": "'+ up_method + '", "target_lang": "'+ target_lang + '", "native_lang": "'+ native_lang +'", "lesson_sentences":['
 
     count = 1
     w_count = 0
@@ -136,7 +136,9 @@ def string_to_json(json_string):
 
 
 # pass video code, target language and native language to create a json file
-def youtube_to_json(urlString, targetLang, nativeLang):
+def youtube_to_json(urlString, targetLang, nativeLang, up_title):
+
+    up_method = 'Youtube url'
     video_id = urlString
     transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=[targetLang, nativeLang])
     transcript = str(transcript)
@@ -148,18 +150,57 @@ def youtube_to_json(urlString, targetLang, nativeLang):
     transcript = transcript.replace(', start:', '", "start":')
     transcript = transcript.replace(', duration:', ', "duration":')
     transcript = transcript.replace("\\", "")
-    # transcript = transcript.replace("'text'", '"text"')
-    # transcript = transcript.replace("'start'", ' "start"')
-    # transcript = transcript.replace("'duration'", ' "duration"')
-    # transcript = transcript.replace(" '", ' "')
-    # transcript = transcript.replace("', ", '", ')
-    # transcript = transcript.replace("'", " ")
-    # transcript = transcript.replace("\\", "")
+    # change the language codes
+    if (targetLang == 'ru'):
+        targetLang = 'Russian'
+    if (targetLang == 'en'):
+        targetLang = 'English'
+    if (targetLang == 'es'):
+        targetLang = 'Spanish'
+    if (targetLang == 'fr'):
+        targetLang = 'French'
 
-    print(transcript)
+    if (nativeLang == 'ru'):
+        nativeLang = 'Russian'
+    if (nativeLang == 'en'):
+        nativeLang = 'English'
+    if (nativeLang == 'es'):
+        nativeLang = 'Spanish'
+    if (nativeLang == 'fr'):
+        nativeLang = 'French'
+
     new_string = json.loads(transcript)
 
-    return json.dumps(new_string, ensure_ascii=False)
+    new_json = '{ "up_title": "' + up_title + '", "up_method": "' + up_method + '", "target_lang": "' + targetLang + '", "native_lang": "' + nativeLang + '", "lesson_sentences":['
+    w_count = 0;
+    for x in new_string:
+        sent_count = 0;
+
+        w_count = w_count + 1
+        new_json = new_json + '{"sentence_":['
+        to_split = x['text']
+        to_split = to_split.split(" ")
+        for i in to_split:
+            print(i)
+
+            sent_count = sent_count + 1
+            if len(to_split) > sent_count:
+                new_json = new_json + '{"' + targetLang + '":"' + i + '","' + nativeLang + '": ""},'
+
+            else:
+                new_json = new_json + '{"' + targetLang + '":"' + i + '","' + nativeLang + '": ""}'
+
+        if len(new_string) > w_count:
+            new_json = new_json + ']},'
+        else:
+            new_json = new_json + ']}]}'
+    print(type(new_json))
+    new_json = json.loads(new_json)
+    print(type(new_json))
+
+    # new_json = json.loads(new_json)
+
+    return json.dumps(new_json, ensure_ascii=False)
 
 
 # converts a pdf to image then image to string
@@ -295,16 +336,10 @@ def add_master_dict(en_word, spa_word, fr_word, rus_word):
     add_word.save()
 
 
-def text_to_string(text_file, target_lang, native_lang, up_method):
+def text_to_string(text_file, target_lang, native_lang, up_method, up_title):
     # new_file_name = os.path.splitext(text_file)[0] + ''
     text = io.open(text_file, 'r', encoding="utf-8")
-    text_json_obj = string_to_json(string_to_json_format(text.read(), target_lang, native_lang, up_method))
-
-    # textStr = text.read()
-    # splits = textStr.split()
-    # for split in splits:
-    #     check_words(split, target_lang)
-
+    text_json_obj = string_to_json(string_to_json_format(text.read(), target_lang, native_lang, up_method, up_title))
     text.close()
     os.remove(text_file)
     return text_json_obj
