@@ -10,7 +10,7 @@ import unicodedata
 from youtube_transcript_api import YouTubeTranscriptApi
 from pdf2image import convert_from_path
 import os
-from translate import Translator
+# from translate import Translator
 from langImport.models import *
 from google_trans_new import google_translator
 import re
@@ -153,38 +153,16 @@ def youtube_to_json(urlString, targetLang, nativeLang, up_title):
     transcript = transcript.replace(', duration:', ', "duration":')
     transcript = transcript.replace("\\", "")
 
-    # change the language codes
-    if (targetLang == 'ru'):
-        targetLang = 'Russian'
-    if (targetLang == 'en'):
-
-
     #change the language codes
     if(targetLang == 'ru'):
         targetLang = 'Russian'
     if(targetLang == 'en'):
-
         targetLang = 'English'
     if (targetLang == 'es'):
         targetLang = 'Spanish'
     if (targetLang == 'fr'):
         targetLang = 'French'
 
-
-    if (nativeLang == 'ru'):
-        nativeLang = 'Russian'
-    if (nativeLang == 'en'):
-
-
-    if(nativeLang == 'ru'):
-        nativeLang = 'Russian'
-    if(nativeLang == 'en'):
-
-        nativeLang = 'English'
-    if (nativeLang == 'es'):
-        nativeLang = 'Spanish'
-    if (nativeLang == 'fr'):
-        nativeLang = 'French'
 
 
     new_string = json.loads(transcript)
@@ -251,7 +229,7 @@ def pdf_to_string(pdf_file, target_lang):
 # checks to see if there are any missing translations among the languages for the new word
 # if there is, add them, and then make a new master dictionary entry
 # using whenever new word is added as it'll automatically populate all other languages
-def check_trans(new_word):
+def check_trans(new_word, target_lang):
     translator = google_translator()
 
     result = translator.translate(new_word, lang_tgt='en')
@@ -356,6 +334,13 @@ def check_trans(new_word):
                         FrenchWord.objects.filter(word=result2).first(),
                         RussianWord.objects.filter(word=result3).first())
 
+        if target_lang == "Russian":
+            print(type(result3))
+            print(result3)
+            print(result1)
+            print(result2)
+            print(result)
+            return result;
 
 # called whenever a new word is added. it will make a new dictionary entry for the one word using all languages
 def add_master_dict(en_word, spa_word, fr_word, rus_word):

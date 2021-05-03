@@ -39,8 +39,9 @@ class ReadView(DetailView):
 		print(btn_native)
 		print(pk)
 		if request.is_ajax():
-			native_word = btn_word + "/" + btn_target + "/" + btn_native;
+			# native_word = btn_word + "/" + btn_target + "/" + btn_native;
 			# native_word = IM.translate_string(btn_word, 'en', 'fr')
+			native_word = IM.check_trans(btn_word, btn_target);
 			return JsonResponse({'native_word' : native_word}, status=200)
 		return render(request, 'langImport/read.html' )
 	
