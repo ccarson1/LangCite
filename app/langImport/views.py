@@ -35,6 +35,8 @@ class ReadView(DetailView):
 		btn_target = request.POST.get('btn_target')
 		btn_native = request.POST.get('btn_native')
 		print(btn_word)
+		print(type(btn_target))
+		print(btn_native)
 		print(pk)
 		if request.is_ajax():
 			native_word = btn_word + "/" + btn_target + "/" + btn_native;
@@ -60,14 +62,6 @@ def import_page(request):
 		userLang = request.POST['userLang']
 		lessonLang = request.POST['lessonLang']
 		authorName = request.POST['authorName']
-
-
-
-		#converts string value from checkbox to a boolean value
-		# if(up_public == "unchecked"):
-		# 	up_public = False
-		# else:
-		# 	up_public = True
 
 
 
@@ -101,17 +95,17 @@ def import_page(request):
 
 				#saves json from pdf method
 				if up_method == 'PDF':
-					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.pdf_to_string('media/' + filename, translate_lang), lessonLang, userLang, up_method))))
+					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.pdf_to_string('media/' + filename, translate_lang), lessonLang, userLang, up_method, up_title))))
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 					newlesson.save()
 				#saves json from text file
 				elif up_method == 'Text File':
-					lesson_json = IM.text_to_string('media/' + filename, lessonLang, userLang, up_method)
+					lesson_json = IM.text_to_string('media/' + filename, lessonLang, userLang, up_method, up_title)
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 					newlesson.save()
 				#saves json from image
 				elif up_method == 'Image':
-					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.image_to_string('media/' + filename, translate_lang), lessonLang, userLang, up_method))))
+					lesson_json = IM.string_to_json(str(IM.remove_control_characters(IM.string_to_json_format(IM.image_to_string('media/' + filename, translate_lang), lessonLang, userLang, up_method, up_title))))
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json )
 					newlesson.save()
 				#loads this page without youtube url selected
@@ -137,7 +131,7 @@ def import_page(request):
 
 				#saves json from youtube url
 				yturl = request.POST['yturl']
-				lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, native_lang )
+				lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, native_lang, up_title )
 				newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
 				newlesson.save()
 				#loads this page when youtube url is selected

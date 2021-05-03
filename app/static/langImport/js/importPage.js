@@ -1,4 +1,6 @@
- 
+
+
+
 // sets the input as a file uploader or a text input on the form
 
 document.getElementById("flexRadioDefault4").addEventListener("click", function(){
@@ -68,6 +70,16 @@ function checkNativeCookie() {
 // function spinner(){
 // 	alert("import");
 // }
+
+
+
+
+function checkTarget(){
+	alert("Please select a target language in the languages tab!");
+	if(document.getElementById("lessonLang").value == "" || document.getElementById("lessonLang").value == null){
+		alert("Please select a target language in the languages tab!");
+	}
+};
 
 function NoTargetLanguageError(){
 	var NLV = document.getElementById("noLangVal");

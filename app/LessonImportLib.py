@@ -35,6 +35,7 @@ def image_to_string(image_file, imageLang):
 
 
 def string_to_json_format(lesson_string, target_lang, native_lang, up_method, up_title):
+
     lesson_string = remove_control_characters(lesson_string)
     lesson_string = lesson_string.replace("\n", " ")
     lesson_string = lesson_string.replace("- ", '')
@@ -141,6 +142,7 @@ def youtube_to_json(urlString, targetLang, nativeLang, up_title):
     up_method = 'Youtube url'
     video_id = urlString
     transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=[targetLang, nativeLang])
+
     transcript = str(transcript)
     transcript = remove_control_characters(transcript)
 
@@ -150,28 +152,49 @@ def youtube_to_json(urlString, targetLang, nativeLang, up_title):
     transcript = transcript.replace(', start:', '", "start":')
     transcript = transcript.replace(', duration:', ', "duration":')
     transcript = transcript.replace("\\", "")
+
     # change the language codes
     if (targetLang == 'ru'):
         targetLang = 'Russian'
     if (targetLang == 'en'):
+
+
+    #change the language codes
+    if(targetLang == 'ru'):
+        targetLang = 'Russian'
+    if(targetLang == 'en'):
+
         targetLang = 'English'
     if (targetLang == 'es'):
         targetLang = 'Spanish'
     if (targetLang == 'fr'):
         targetLang = 'French'
 
+
     if (nativeLang == 'ru'):
         nativeLang = 'Russian'
     if (nativeLang == 'en'):
+
+
+    if(nativeLang == 'ru'):
+        nativeLang = 'Russian'
+    if(nativeLang == 'en'):
+
         nativeLang = 'English'
     if (nativeLang == 'es'):
         nativeLang = 'Spanish'
     if (nativeLang == 'fr'):
         nativeLang = 'French'
 
+
     new_string = json.loads(transcript)
 
     new_json = '{ "up_title": "' + up_title + '", "up_method": "' + up_method + '", "target_lang": "' + targetLang + '", "native_lang": "' + nativeLang + '", "lesson_sentences":['
+
+
+
+
+
     w_count = 0;
     for x in new_string:
         sent_count = 0;
@@ -200,7 +223,11 @@ def youtube_to_json(urlString, targetLang, nativeLang, up_title):
 
     # new_json = json.loads(new_json)
 
+    
+    
     return json.dumps(new_json, ensure_ascii=False)
+
+
 
 
 # converts a pdf to image then image to string
@@ -334,6 +361,8 @@ def check_trans(new_word):
 def add_master_dict(en_word, spa_word, fr_word, rus_word):
     add_word = Tdictionary(en_id=en_word, spa_id=spa_word, fr_id=fr_word, ru_id=rus_word)
     add_word.save()
+
+
 
 
 def text_to_string(text_file, target_lang, native_lang, up_method, up_title):
