@@ -1,27 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User
-import jsonfield 
+import jsonfield
 from django.urls import reverse
+
 
 # Languages table
 class Language(models.Model):
     language_name = models.CharField(max_length=20)
 
     def __str__(self):
-    	return self.language_name
+        return self.language_name
+
 
 # Genres table
 class Genre(models.Model):
     genre_name = models.CharField(max_length=10)
-    
-    def __str__(self):
-    	return self.genre_name
 
+    def __str__(self):
+        return self.genre_name
 
 
 # Lessons table
 class Lesson(models.Model):
-    
     lesson_title = models.CharField(max_length=255)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     language_id = models.ForeignKey(Language, on_delete=models.CASCADE)
@@ -29,43 +29,45 @@ class Lesson(models.Model):
     public = models.BooleanField(default=True)
     # this json_file contains both original text and translated text
     json_file = jsonfield.JSONField()
-  
-    #displays title and user in the admin section
+
+    # displays title and user in the admin section
     def __str__(self):
-    	return self.lesson_title + ' | ' + str(self.user_id)
-    #returns to lessons page 
+        return self.lesson_title + ' | ' + str(self.user_id)
+
+    # returns to lessons page
     def get_absolute_url(self):
         return reverse('web-lessons')
 
 
-
 # English word list
 class EnglishWord(models.Model):
-    
-    word = models.CharField(max_length=20, default = "none")
-    definition = models.TextField(max_length=20, default= "none")
-    word_class = models.CharField(max_length=20, default = "none")
-    pron = models.CharField(max_length=20, default = "none")
+    word = models.CharField(max_length=20, default="none")
+    definition = models.TextField(max_length=20, default="none")
+    word_class = models.CharField(max_length=20, default="none")
+    pron = models.CharField(max_length=20, default="none")
 
     def __str__(self):
-        return self.word 
-# Russian word list
+        return self.word
+    # Russian word list
+
+
 class RussianWord(models.Model):
-    word = models.CharField(max_length=20, default = "none")
-    definition = models.TextField(max_length=20, default= "none")
-    word_class = models.CharField(max_length=20, default = "none")
-    pron = models.CharField(max_length=20, default = "none")
+    word = models.CharField(max_length=20, default="none")
+    definition = models.TextField(max_length=20, default="none")
+    word_class = models.CharField(max_length=20, default="none")
+    pron = models.CharField(max_length=20, default="none")
 
     def __str__(self):
-        return self.word 
+        return self.word
+
+    # French word list
 
 
-# French word list
 class FrenchWord(models.Model):
-    word = models.CharField(max_length=20, default = "none")
-    definition = models.TextField(max_length=20, default= "none")
-    word_class = models.CharField(max_length=20, default = "none")
-    pron = models.CharField(max_length=20, default = "none")
+    word = models.CharField(max_length=20, default="none")
+    definition = models.TextField(max_length=20, default="none")
+    word_class = models.CharField(max_length=20, default="none")
+    pron = models.CharField(max_length=20, default="none")
 
     def __str__(self):
         return self.word
@@ -73,10 +75,10 @@ class FrenchWord(models.Model):
 
 # Spanish word list
 class SpanishWord(models.Model):
-    word = models.CharField(max_length=20, default = "none")
-    definition = models.TextField(max_length=20, default= "none")
-    word_class = models.CharField(max_length=20, default = "none")
-    pron = models.CharField(max_length=20, default = "none")
+    word = models.CharField(max_length=20, default="none")
+    definition = models.TextField(max_length=20, default="none")
+    word_class = models.CharField(max_length=20, default="none")
+    pron = models.CharField(max_length=20, default="none")
 
     def __str__(self):
         return self.word
@@ -93,9 +95,4 @@ class Tdictionary(models.Model):
     fr_id = models.ForeignKey(FrenchWord, on_delete=models.CASCADE, related_name="lang4")
 
     def __str__(self):
-        return str(self.word_id)
-
-
-
-
-
+        return self.translation_id
