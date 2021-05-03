@@ -10,7 +10,8 @@ var read_page;
 if(read_mode == "sentence"){
 	sentence_num = 1;
 }else{
-	sentence_num = getCookie("sentences")
+	// sentence_num = getCookie("sentences")
+	sentence_num = 1;
 }
 try{
 	var lesson_json = document.getElementById("json_lesson").innerHTML;
@@ -46,7 +47,7 @@ function set_mode(mode){
 
 function populate_words(){
 	position = getCookie("read_page");
-	pos = position.split("_")
+	pos = position.split(":_:")
 	console.log(pos[1]);
 
 	if(position == ""){
@@ -328,7 +329,30 @@ btn_right.addEventListener("click", function(){
 	var d = new Date();
 	d.setTime(d.getTime() + (1*24*60*60*1000));
 	var expires = "expires="+ d.toUTCString();
-	document.cookie = "read_page=" + read_page + "_" + n + ";" + expires + ";path=/";
+	document.cookie = "read_page=" + read_page + ":_:" + n + ";" + expires + ";path=/";
 
 	populate_words();
 });
+
+
+
+function playAudio(){
+	var speak = new p5.Speech();
+
+	if(store_json.target_lang == "Russian"){
+		speak.setLang("ru-RU");
+	}
+	else if(store_json.target_lang == "French"){
+		speak.setLang("fr-FR");
+	}
+	else if(store_json.target_lang == "Spanish"){
+		speak.setLang("es-ES");
+	}
+	else if(store_json.target_lang == "English"){
+		speak.setLang("en-US");
+	}
+
+	
+	var word = document.getElementById("target_word").innerHTML;
+	speak.speak(word);
+}

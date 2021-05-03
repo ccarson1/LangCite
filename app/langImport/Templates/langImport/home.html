@@ -3,10 +3,10 @@
 {% block content %}
 
 	<div class="container m-5">
-		<form class="d-flex flex-row-reverse">
+<!-- 		<form class="d-flex flex-row-reverse" method=POST action="{% url  'web-home'%}">
 	        <input class="form-control me-5" type="search" placeholder="Search" style="width: 300px;" aria-label="Search">
 	        <button class="btn btn-outline-success me-5" type="submit">Search</button>
-	      </form>
+	      </form> -->
 
 	      <div class="mx-auto" style="width: 350px;"><h1 >Public Lessons</h1></div>
 	      <!-- Gets the object list from the lesson table in the database
@@ -17,13 +17,13 @@
 				<h3>{{ lesson.lesson_title }}</h3>
 
 
-				  <img src="{% static 'langImport/img/oldman.jpg' %}" class="card-img-top" alt="...">
+				  <a  href="{% url 'web-read' lesson.pk %}"><img src="{% static 'langImport/img/oldman.jpg' %}" class="card-img-top" alt="..."></a>
 				  <div class="card-body">
 				    <p class="card-text"></p>
 				  </div>
 				  <small class="text-muted">By : {{ lesson.user_id }}</small><br/>
 				  <small class="text-muted">Language : {{ lesson.language_id }}</small><br/>
-				  <a class="btn btn-primary m-auto" style="width: 200px;" href="{% url 'web-read' lesson.pk %}">Read</a>
+				  <a class="btn btn-primary" href="{% url 'web-read' lesson.pk %}">Read</a>
 			 </div>
 	
 			{% endif %}
