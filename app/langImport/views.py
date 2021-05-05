@@ -13,6 +13,7 @@ from .forms import EditForm
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.contrib import messages
 
 
 
@@ -34,14 +35,15 @@ class ReadView(DetailView):
 		btn_word = request.POST.get('btn_word')
 		btn_target = request.POST.get('btn_target')
 		btn_native = request.POST.get('btn_native')
-		print(btn_word)
-		print(type(btn_target))
+		# print(btn_word)
+		# print(type(btn_target))
 		print(btn_native)
-		print(pk)
+		# print(pk)
 		if request.is_ajax():
 			# native_word = btn_word + "/" + btn_target + "/" + btn_native;
 			# native_word = IM.translate_string(btn_word, 'en', 'fr')
-			native_word = IM.check_trans(btn_word, btn_target);
+			# native_word = IM.check_trans(btn_word, btn_target);
+			native_word = IM.check_trans(btn_word, btn_target, btn_native)
 			return JsonResponse({'native_word' : native_word}, status=200)
 		return render(request, 'langImport/read.html' )
 	
@@ -110,6 +112,7 @@ def import_page(request):
 					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json )
 					newlesson.save()
 				#loads this page without youtube url selected
+				messages.success(request, ("New Lesson Created!"))
 				return render(request, 'langImport/import.html', {'up_public' : up_public , 'up_public' : up_public, 'yturl' : yturl})
 			else:
 				#sets the language references for supported languages for YouTube URLs
@@ -131,22 +134,30 @@ def import_page(request):
 					translate_lang = 'fr'
 
 				#saves json from youtube url
-				yturl = request.POST['yturl']
-				lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, native_lang, up_title )
-				newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
-				newlesson.save()
-				#loads this page when youtube url is selected
-				return render(request, 'langImport/import.html', {'userLang' : userLang , 'authorName' : authorName, 'yturl' : yturl})
+				try:
+					yturl = request.POST['yturl']
+					lesson_json = IM.youtube_to_json(IM.extract_id(yturl), translate_lang, native_lang, up_title )
+					newlesson = Lesson.objects.create(lesson_title = up_title, user_id = request.user, language_id = Language.objects.get(language_name = lessonLang), genre_id = Genre.objects.get(genre_name = genre), public = up_public, json_file = lesson_json)
+					newlesson.save()
+					#loads this page when youtube url is selected
+					messages.success(request, ("New Lesson Created!"))
+					return render(request, 'langImport/import.html', {'userLang' : userLang , 'authorName' : authorName, 'yturl' : yturl})
+				except:
+					messages.error(request, ("Lesson Import Failed!"))
+					return render(request, 'langImport/import.html', {'userLang' : userLang , 'authorName' : authorName, 'yturl' : yturl})
+
 		else:
 			if lessonLang == "":
 				lessonLang = "No Target Language!!!"
 			if userLang == "":
 				userLang = "No Native language selected!!!"
+
 			return render(request, 'langImport/import.html', {'lessonLang' : lessonLang, 'userLang' : userLang })
 		
 
 		
 	else:
+		
 		return render(request, 'langImport/import.html', {})
 
 

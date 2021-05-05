@@ -3,12 +3,12 @@
 
 {% block content %}
 <h1>Register</h1>
-	<div class="form-group">
+	<div class="container form-group">
 		<form method="POST">
 			{% csrf_token %}
 			{{ form.as_p }}
-			<button class="btn btn-secondary">Register</button>
-			<a class="btn btn-secondary" href="{% url 'web-home'%}">Cancel</a>
+			<button class="btn btn-primary">Register</button>
+			<a class="btn btn-btn-primary" href="{% url 'web-home'%}">Cancel</a>
 		</form>
 
 	</div>

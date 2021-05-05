@@ -16,7 +16,8 @@ function sent_in_par(num_sent){
 
 function setNativeLang() { 
     var ele = document.getElementsByName('btnradio'); 
-    var sent = document.getElementById('sent_num').value;
+    // var sent = document.getElementById('sent_num').value;
+    var sent = 1;
 
     
     var output;

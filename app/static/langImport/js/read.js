@@ -146,6 +146,7 @@ function createReadButtons(word, word_pos, sent_pos){
 		var att5 = document.createAttribute("data-bs-placement");
 		var att6 = document.createAttribute("data-bs-content");
 		var att7 = document.createAttribute("name");
+		var att8 = document.createAttribute("onclick");
 		
 		
 		att.value = "btn btn-light";
@@ -155,6 +156,7 @@ function createReadButtons(word, word_pos, sent_pos){
 		att5.value = "bottom";
 		att6.value = "word";
 		att7.value = sent_pos;
+		att8.value = "click_word('"+ word +"','"+ att2.value +"')";
 		
 		
 		btn.setAttributeNode(att);
@@ -164,107 +166,200 @@ function createReadButtons(word, word_pos, sent_pos){
 		btn.setAttributeNode(att5);
 		btn.setAttributeNode(att6);
 		btn.setAttributeNode(att7);
+		btn.setAttributeNode(att8);
 		
 		
 		document.getElementById("json_lesson").appendChild(btn);
 		
 	}
 
-	// sends the word to the server using ajax
-	for(var i =0; i < document.getElementsByClassName("btn btn-light").length; i++){
-		document.getElementsByClassName("btn btn-light")[i].addEventListener("click", function(){
-			var new_word ='dddd'
-			btn_word = this.innerHTML;
-			if(store_json.up_method == "PDF" || store_json.up_method == "Text File" || store_json.up_method == "Image" || store_json.up_method == "Youtube url"){
-				
-				bust = this.id.split("_");
-				console.log("sentence " + bust[0] + " on word " + bust[1] + " = " + store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Russian);
-				
-				// document.getElementById("target_def").innerHTML = bust;
-				if(store_json.native_lang == 'English'){
-					var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].English;
-					if(en_word != ""){
-						document.getElementById("target_def").innerHTML = en_word;
-					}
-					else{
-						document.getElementById("target_def").innerHTML = "";
-					}
-				}
-				if(store_json.native_lang == 'Russian'){
-					var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Russian;
-					if(en_word != ""){
-						document.getElementById("target_def").innerHTML = en_word;
-					}
-					else{
-						document.getElementById("target_def").innerHTML = "";
-					}
-				}
-				if(store_json.native_lang == 'French'){
-					var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].French;
-					if(en_word != ""){
-						document.getElementById("target_def").innerHTML = en_word;
-					}
-					else{
-						document.getElementById("target_def").innerHTML = "";
-					}
-				}
-				if(store_json.native_lang == 'Spanish'){
-					var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Spanish;
-					if(en_word != ""){
-						document.getElementById("target_def").innerHTML = en_word;
-					}
-					else{
-						document.getElementById("target_def").innerHTML = "";
-					}
-				}
 
-			}else{
-				console.log("sentence " + bust[0] + " on word " + bust[1] + " = " );
-			}
-			document.getElementById("target_word").innerHTML = this.innerHTML;
-			
-			
-
-			if(document.getElementById("target_def").innerHTML == ""){
-				$.ajax({
-					type: "POST",
-					url: path,
-					data: {
-						'btn_word': btn_word,
-						'btn_target': store_json.target_lang,
-						'btn_native': store_json.native_lang,
-						'csrfmiddlewaretoken': csrf
-					},
-					success: function(response){
-						console.log(response.native_word);
-						new_word = response.native_word;
-
-						var w = new Date();
-						w.setTime(w.getTime() + (1*24*60*60*1000));
-						var expires = "expires="+ w.toUTCString();
-						document.cookie = "trans_word=" + new_word + ";" + expires + ";path=/";
-						document.getElementById("target_def").innerHTML = new_word;
-						
-						
-					}
-
-
-				});
-			}
-			
-			
-			new_word = getCookie("trans_word");
-			///set second parameter with the defition from server////
-			this.setAttribute("data-bs-content", new_word);
-			
-			return false;
-		});
-		
-	}
 	
 }
 
+function click_word(btn_word, btn_id){
 
+	
+		if(store_json.up_method == "PDF" || store_json.up_method == "Text File" || store_json.up_method == "Image" || store_json.up_method == "Youtube url"){
+			
+			bust = btn_id.split("_");
+			// console.log("sentence " + bust[0] + " on word " + bust[1] + " = " + store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Russian);
+			
+			// document.getElementById("target_def").innerHTML = bust;
+			if(store_json.native_lang == 'English'){
+				var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].English;
+				if(en_word != ""){
+					document.getElementById("target_def").innerHTML = en_word;
+				}
+				else{
+					document.getElementById("target_def").innerHTML = "";
+				}
+			}
+			if(store_json.native_lang == 'Russian'){
+				var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Russian;
+				if(en_word != ""){
+					document.getElementById("target_def").innerHTML = en_word;
+				}
+				else{
+					document.getElementById("target_def").innerHTML = "";
+				}
+			}
+			if(store_json.native_lang == 'French'){
+				var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].French;
+				if(en_word != ""){
+					document.getElementById("target_def").innerHTML = en_word;
+				}
+				else{
+					document.getElementById("target_def").innerHTML = "";
+				}
+			}
+			if(store_json.native_lang == 'Spanish'){
+				var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Spanish;
+				if(en_word != ""){
+					document.getElementById("target_def").innerHTML = en_word;
+				}
+				else{
+					document.getElementById("target_def").innerHTML = "";
+				}
+			}
+
+		}else{
+			console.log("sentence " + bust[0] + " on word " + bust[1] + " = " );
+		}
+		document.getElementById("target_word").innerHTML = btn_word;
+		
+		
+
+		if(document.getElementById("target_def").innerHTML == ""){
+			$.ajax({
+				type: "POST",
+				url: path,
+				data: {
+					'btn_word': btn_word,
+					'btn_target': store_json.target_lang,
+					'btn_native': getCookie("Native"),
+					'csrfmiddlewaretoken': csrf
+				},
+				success: function(response){
+					console.log(response.native_word);
+					new_word = response.native_word;
+					
+					// if(new_word != null){
+					// 	if(store_json.native_lang == "English")
+					// 		  store_json.lesson_sentences[bust[0]].sentence_[bust[1]].English = new_word;
+					// 		  var w = new Date();
+					// 		  w.setTime(w.getTime() + (1*24*60*60*1000));
+					// 		  var expires = "expires="+ w.toUTCString();
+					// 		  document.cookie = "json=" + JSON.stringify(store_json) + ";" + expires + ";path=/";
+							  
+					// }
+					
+
+					var w = new Date();
+					w.setTime(w.getTime() + (1*24*60*60*1000));
+					var expires = "expires="+ w.toUTCString();
+					document.cookie = "trans_word=" + new_word + ";" + expires + ";path=/";
+					document.getElementById("target_def").innerHTML = new_word;
+					
+					
+				}
+
+
+			});
+		}
+
+}
+	// sends the word to the server using ajax
+	// for(var i =0; i < document.getElementsByClassName("btn btn-light").length; i++){
+	// 	document.getElementsByClassName("btn btn-light")[i].addEventListener("click", function(){
+			
+	// 		btn_word = this.innerHTML;
+	// 		if(store_json.up_method == "PDF" || store_json.up_method == "Text File" || store_json.up_method == "Image" || store_json.up_method == "Youtube url"){
+				
+	// 			bust = this.id.split("_");
+	// 			console.log("sentence " + bust[0] + " on word " + bust[1] + " = " + store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Russian);
+				
+	// 			// document.getElementById("target_def").innerHTML = bust;
+	// 			if(store_json.native_lang == 'English'){
+	// 				var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].English;
+	// 				if(en_word != ""){
+	// 					document.getElementById("target_def").innerHTML = en_word;
+	// 				}
+	// 				else{
+	// 					document.getElementById("target_def").innerHTML = "";
+	// 				}
+	// 			}
+	// 			if(store_json.native_lang == 'Russian'){
+	// 				var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Russian;
+	// 				if(en_word != ""){
+	// 					document.getElementById("target_def").innerHTML = en_word;
+	// 				}
+	// 				else{
+	// 					document.getElementById("target_def").innerHTML = "";
+	// 				}
+	// 			}
+	// 			if(store_json.native_lang == 'French'){
+	// 				var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].French;
+	// 				if(en_word != ""){
+	// 					document.getElementById("target_def").innerHTML = en_word;
+	// 				}
+	// 				else{
+	// 					document.getElementById("target_def").innerHTML = "";
+	// 				}
+	// 			}
+	// 			if(store_json.native_lang == 'Spanish'){
+	// 				var en_word = store_json.lesson_sentences[bust[0]].sentence_[bust[1]].Spanish;
+	// 				if(en_word != ""){
+	// 					document.getElementById("target_def").innerHTML = en_word;
+	// 				}
+	// 				else{
+	// 					document.getElementById("target_def").innerHTML = "";
+	// 				}
+	// 			}
+
+	// 		}else{
+	// 			console.log("sentence " + bust[0] + " on word " + bust[1] + " = " );
+	// 		}
+	// 		document.getElementById("target_word").innerHTML = this.innerHTML;
+			
+			
+
+	// 		if(document.getElementById("target_def").innerHTML == ""){
+	// 			$.ajax({
+	// 				type: "POST",
+	// 				url: path,
+	// 				data: {
+	// 					'btn_word': btn_word,
+	// 					'btn_target': store_json.target_lang,
+	// 					'btn_native': store_json.native_lang,
+	// 					'csrfmiddlewaretoken': csrf
+	// 				},
+	// 				success: function(response){
+	// 					console.log(response.native_word);
+	// 					new_word = response.native_word;
+
+	// 					var w = new Date();
+	// 					w.setTime(w.getTime() + (1*24*60*60*1000));
+	// 					var expires = "expires="+ w.toUTCString();
+	// 					document.cookie = "trans_word=" + new_word + ";" + expires + ";path=/";
+	// 					document.getElementById("target_def").innerHTML = new_word;
+						
+						
+	// 				}
+
+
+	// 			});
+	// 		}
+			
+			
+	// 		new_word = getCookie("trans_word");
+	// 		///set second parameter with the defition from server////
+	// 		this.setAttribute("data-bs-content", new_word);
+			
+	// 		return false;
+	// 	});
+		
+	// }
 
 //turns the pages andsets the page number as well as the progress bar
 //variables for turning pages
@@ -300,7 +395,7 @@ btn_left.addEventListener("click", function(){
 	var d = new Date();
 	d.setTime(d.getTime() + (1*24*60*60*1000));
 	var expires = "expires="+ d.toUTCString();
-	document.cookie ="read_page=" + read_page + "_" + n +  ";" + expires + ";path=/";
+	document.cookie ="read_page=" + read_page + ":_:" + n +  ";" + expires + ";path=/";
 
 	populate_words();
 });

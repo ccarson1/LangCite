@@ -38,15 +38,21 @@ def string_to_json_format(lesson_string, target_lang, native_lang, up_method, up
 
     lesson_string = remove_control_characters(lesson_string)
     lesson_string = lesson_string.replace("\n", " ")
-    lesson_string = lesson_string.replace("- ", '')
-    lesson_string = lesson_string.replace("-", '')
-    lesson_string = lesson_string.replace("\\", '')
+    lesson_string = lesson_string.replace("- ", ' ')
+    lesson_string = lesson_string.replace(" - ", ' ')
+    lesson_string = lesson_string.replace("—", ' ')
+    lesson_string = lesson_string.replace("|", ' ')
+    lesson_string = lesson_string.replace("(", ' ')
+    lesson_string = lesson_string.replace(")", ' ')
+    lesson_string = lesson_string.replace(":", ' ')
+    lesson_string = lesson_string.replace(" .", '. ')
+    lesson_string = lesson_string.replace("\\", ' ')
     lesson_string = lesson_string.replace(", ", " ")
-    lesson_string = lesson_string.replace("«", "")
-    lesson_string = lesson_string.replace("»", "")
-    lesson_string = lesson_string.replace("›", "")
-    lesson_string = lesson_string.replace("©", "")
-    lesson_string = lesson_string.replace("„", "")
+    lesson_string = lesson_string.replace("«", " ")
+    lesson_string = lesson_string.replace("»", " ")
+    lesson_string = lesson_string.replace("›", " ")
+    lesson_string = lesson_string.replace("©", " ")
+    lesson_string = lesson_string.replace("„", " ")
     lesson_string = lesson_string.lower()
 
     # removes extra spaces within the text
@@ -62,24 +68,10 @@ def string_to_json_format(lesson_string, target_lang, native_lang, up_method, up
         for n in m:
             n.replace("/,", "")
 
-    new_json = '{"up_title": "'+ up_title + '", "up_method": "'+ up_method + '", "target_lang": "'+ target_lang + '", "native_lang": "'+ native_lang +'", "lesson_sentences":['
+    new_json = '{"up_title": "' + up_title + '", "up_method": "' + up_method + '", "target_lang": "' + target_lang + '", "native_lang": "' + native_lang + '", "lesson_sentences":['
 
     count = 1
     w_count = 0
-    target = ''
-
-    # setting up target because I'm lazy and can't be bothered to make a better solution
-    if target_lang == 'English':
-        target = 'en'
-    elif target_lang == 'Spanish':
-        target = 'es'
-    elif target_lang == 'Russian':
-        target = 'ru'
-    elif target_lang == 'French':
-        target = 'fr'
-
-    translator = google_translator()
-
     for i in lesson_string:
         new_string = i.split(" ")
         new_json = new_json + '{"sentence_'
@@ -91,37 +83,10 @@ def string_to_json_format(lesson_string, target_lang, native_lang, up_method, up
 
             sent_count = sent_count + 1
             if len(new_string) > sent_count:
-
-                result = translator.translate(k, lang_tgt=target)
-
-                # sometimes multiple words will be provided for translation which causes a crash
-                # this just sets the word to whatever the first provided translation is
-                if isinstance(result, list):
-                    result = result[0]
-
-                # regex out [' and '] from beginning and end of translated words
-                result = re.sub('[^\\w-]+', '', result)
-                result = result.strip()
-                k = k.strip()
-
-                # fair warning: target_lang and native_lang might be flipped
-                # if they are, just flip them in the json. nothing else should be effected
-                new_json = new_json + '{"' + target_lang + '":"' + result + '","' + native_lang + '":"' + k + '"},'
-
-                check_trans(k)
+                new_json = new_json + '{"' + target_lang + '":"' + k + '","' + native_lang + '": ""},'
 
             else:
-                result = translator.translate(k, lang_tgt=target)
-
-                if isinstance(result, list):
-                    result = result[0]
-
-                result = re.sub('[^\\w-]+', '', result)
-
-                new_json = new_json + '{"' + target_lang + '":"' + result + '","' + native_lang + '":"' + k + '"}'
-
-                check_trans(k)
-
+                new_json = new_json + '{"' + target_lang + '":"' + k + '","' + native_lang + '": ""}'
         if len(lesson_string) > w_count:
             new_json = new_json + ']},'
         else:
@@ -163,6 +128,15 @@ def youtube_to_json(urlString, targetLang, nativeLang, up_title):
     if (targetLang == 'fr'):
         targetLang = 'French'
 
+    if(nativeLang == 'ru'):
+        nativeLang = 'Russian'
+    if(nativeLang == 'en'):
+        nativeLang = 'English'
+    if (nativeLang == 'es'):
+        nativeLang = 'Spanish'
+    if (nativeLang == 'fr'):
+        nativeLang = 'French'
+
 
 
     new_string = json.loads(transcript)
@@ -195,9 +169,9 @@ def youtube_to_json(urlString, targetLang, nativeLang, up_title):
             new_json = new_json + ']},'
         else:
             new_json = new_json + ']}]}'
-    print(type(new_json))
+
     new_json = json.loads(new_json)
-    print(type(new_json))
+
 
     # new_json = json.loads(new_json)
 
@@ -229,10 +203,22 @@ def pdf_to_string(pdf_file, target_lang):
 # checks to see if there are any missing translations among the languages for the new word
 # if there is, add them, and then make a new master dictionary entry
 # using whenever new word is added as it'll automatically populate all other languages
-def check_trans(new_word, target_lang):
+def check_trans(new_word, target_lang, native_lang):
     translator = google_translator()
-
-    result = translator.translate(new_word, lang_tgt='en')
+    
+    if(native_lang == "English"):
+        result = translator.translate(new_word, lang_tgt='en')
+    
+    if(native_lang == "Spanish"):
+        result = translator.translate(new_word, lang_tgt='es')
+    
+    if(native_lang == "French"):
+        result = translator.translate(new_word, lang_tgt='fr')
+    
+    if(native_lang == "Russian"):
+        result = translator.translate(new_word, lang_tgt='ru')
+    
+    
 
     result = result.strip()
     result = result.replace(' ', '-')
@@ -243,11 +229,27 @@ def check_trans(new_word, target_lang):
 
     # with this I'm assuming that since if a word is added there'll be an English translation,
     # that if it is missing then the word just doesn't exist
-    if EnglishWord.objects.filter(word=result).exists():
-        return
+    if(native_lang == "English" and EnglishWord.objects.filter(word=result).exists()):
+        print(result + " exists")
+        return result
+
+    if(native_lang == "Spanish" and SpanishWord.objects.filter(word=result).exists()):
+        print(result + " exists")
+        return result
+    if(native_lang == "French" and FrenchWord.objects.filter(word=result).exists()):
+        print(result + " exists")
+        return result
+    if(native_lang == "Rusian" and RussianWord.objects.filter(word=result).exists()):
+        print(result + " exists")
+        return result
+    
+
+
+        
+
 
     # definition and word class hell
-    elif not EnglishWord.objects.filter(word=result).exists():
+    elif not EnglishWord.objects.filter(word=result).exists() or SpanishWord.objects.filter(word=result).exists() or FrenchWord.objects.filter(word=result).exists() or RussianWord.objects.filter(word=result).exists():
 
         dictionary = PyDictionary(result)
         definition = ''
@@ -267,21 +269,29 @@ def check_trans(new_word, target_lang):
 
             print(json.dumps(r.json()))
             stage1 = json.dumps(r.json()).split('definitions')
-            wordStage1 = json.dumps(r.json()).split('lexicalCategory')
-            wordStage2 = str(wordStage1[1]).split('"text": ')
-            wordClass = str(wordStage2[1]).split('}')[0]
-            # stage1[1] = re.sub('[^\\w-]+', '', stage1[1])
 
-            stage2 = str(stage1).split('id')
-            defRes = stage2[0]
+            check = str(stage1).split('"')
 
-            for char in defRes:
-                if char.isalnum():
-                    definition += char
-                elif char == ' ':
-                    definition += char
+            #error checking for if there's no translation
+            if check[1] == 'error':
+                definition = 'None'
+                wordClass = "None"
+            else:
+                wordStage1 = json.dumps(r.json()).split('lexicalCategory')
+                wordStage2 = str(wordStage1[1]).split('"text": ')
+                wordClass = str(wordStage2[1]).split('}')[0]
+                # stage1[1] = re.sub('[^\\w-]+', '', stage1[1])
 
-            definition = definition[1:]
+                stage2 = str(stage1).split('id')
+                defRes = stage2[0]
+
+                for char in defRes:
+                    if char.isalnum():
+                        definition += char
+                    elif char == ' ':
+                        definition += char
+
+                definition = definition[1:]
 
         else:
             definition = str(dictionary.getMeanings()).split('[')
@@ -297,6 +307,10 @@ def check_trans(new_word, target_lang):
             definition = definition[0]
             definition = definition[1:]
 
+        result = translator.translate(new_word, lang_tgt='en')
+        if isinstance(result, list):
+            result = result[0]
+        # result = re.sub("[^a-zA-Z']+", '', result)
         en_word = EnglishWord(word=result, definition=definition, word_class=wordClass)
         en_word.save()
 
@@ -334,13 +348,16 @@ def check_trans(new_word, target_lang):
                         FrenchWord.objects.filter(word=result2).first(),
                         RussianWord.objects.filter(word=result3).first())
 
-        if target_lang == "Russian":
-            print(type(result3))
-            print(result3)
-            print(result1)
-            print(result2)
-            print(result)
-            return result;
+        if native_lang == "English":
+            print(result + " does not exist")
+            return result
+        if native_lang == "Spanish":
+            return result1
+        if native_lang == "French":
+            return result2
+        if native_lang == "Russian":
+            return result3
+
 
 # called whenever a new word is added. it will make a new dictionary entry for the one word using all languages
 def add_master_dict(en_word, spa_word, fr_word, rus_word):
