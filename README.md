@@ -10,7 +10,7 @@ Here are then the instructions on how to deploy on Debian/Ubuntu, instructions a
 1. Update to the newest version of the distro with `sudo apt update`.
 2. Install the following packages: `sudo apt install python3-pip python3-venv git libapache2-mod-wsgi-py3 apache2 sqlite3`
 3. Clone the git repo into your home folder and cd into its app folder: `git clone https://github.com/ccarson1/LangCite.git && cd LangCite/app`
-4. edit settings.py in the app folder within the app folder to your liking and in particular change the allowed host IP address and langImport absolute directory, which are at lines 29 and 60: `vi or nano app/settings.py`
+4. Edit settings.py in the app folder within the app folder to your liking and in particular change the allowed host IP address and langImport absolute directory, which are at lines 29 and 60: `vi or nano app/settings.py`
 5. Create the venv in the first app directory and activate it for the shell session: `python3 -m venv venv && source venv/bin/activate`
 6. Install the wheel Python pip package required by other packages, YOU MUST DO THIS FIRST BEFORE INSTALLING THE REST: `pip3 install wheel`
 7. Then install the rest of the needed pip packages: `pip3 install appdirs django google-trans-new jsonfield Pillow pdf2image PyDictionary PyPDF2 translate wheel youtube-transcript-api image pytesseract'
