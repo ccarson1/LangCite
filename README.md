@@ -1,6 +1,6 @@
 # LangCite
  
-This is a Django project meant to be used for a language translation education service. It uses Django, Bootstrap, Apache, and various other technologies. This was created as a project for Ivy Tech's SDEV 265 class in Spring 2021. This was developed by Craig Carson, Corey Teeter, Jeffery Patton, and Josh Chapman.
+This is a Django project meant to be used for a language translation education service. It uses Django, Bootstrap, Apache, and various other technologies. This was created as a project for Ivy Tech Community College's SDEV 265 class in Spring 2021. This was developed by Craig Carson, Corey Teeter, Jeffery Patton, and Josh Chapman.
 
 ## How to install
 First you should install a Linux distro of your choice. We used Ubuntu 20.04 and Debian 10 (Jeffery, the author of this README, transitioned to the latter the night this README was made) to deploy this project, and thus those two are what the instructions were provided for. It should be possible on any other distribution though, with some hard work and research.
