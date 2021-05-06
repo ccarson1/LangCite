@@ -205,17 +205,22 @@ def pdf_to_string(pdf_file, target_lang):
 # using whenever new word is added as it'll automatically populate all other languages
 def check_trans(new_word, target_lang, native_lang):
     translator = google_translator()
-    
+   
+    print(native_lang)
     if(native_lang == "English"):
+        
         result = translator.translate(new_word, lang_tgt='en')
     
     if(native_lang == "Spanish"):
+        
         result = translator.translate(new_word, lang_tgt='es')
     
     if(native_lang == "French"):
+        
         result = translator.translate(new_word, lang_tgt='fr')
     
     if(native_lang == "Russian"):
+       
         result = translator.translate(new_word, lang_tgt='ru')
     
     
@@ -239,7 +244,7 @@ def check_trans(new_word, target_lang, native_lang):
     if(native_lang == "French" and FrenchWord.objects.filter(word=result).exists()):
         print(result + " exists")
         return result
-    if(native_lang == "Rusian" and RussianWord.objects.filter(word=result).exists()):
+    if(native_lang == "Russian" and RussianWord.objects.filter(word=result).exists()):
         print(result + " exists")
         return result
     
@@ -254,65 +259,68 @@ def check_trans(new_word, target_lang, native_lang):
         dictionary = PyDictionary(result)
         definition = ''
         wordClass = ''
+        try:
+            if dictionary.getMeanings()[result] is None:
 
-        if dictionary.getMeanings()[result] is None:
+                # backup using oxford dictionary
+                # has a 1000 request limit so is ONLY to be used as a fallback in case PyDictionary doesn't work like it
+                # sometimes does
+                app_id = '357c2725'
+                app_key = 'ec311ce6a30cde29b5a736a5301f0d9c'
 
-            # backup using oxford dictionary
-            # has a 1000 request limit so is ONLY to be used as a fallback in case PyDictionary doesn't work like it
-            # sometimes does
-            app_id = '357c2725'
-            app_key = 'ec311ce6a30cde29b5a736a5301f0d9c'
+                url = 'https://od-api.oxforddictionaries.com/api/v2/entries/' + 'en' + '/' + result.lower() + '?' + \
+                      "fields=definitions"
+                r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
 
-            url = 'https://od-api.oxforddictionaries.com/api/v2/entries/' + 'en' + '/' + result.lower() + '?' + \
-                  "fields=definitions"
-            r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
+                
+                stage1 = json.dumps(r.json()).split('definitions')
 
-            print(json.dumps(r.json()))
-            stage1 = json.dumps(r.json()).split('definitions')
+                check = str(stage1).split('"')
 
-            check = str(stage1).split('"')
+                #error checking for if there's no translation
+                if check[1] == 'error':
+                    definition = 'None'
+                    wordClass = "None"
+                else:
+                    wordStage1 = json.dumps(r.json()).split('lexicalCategory')
+                    wordStage2 = str(wordStage1[1]).split('"text": ')
+                    wordClass = str(wordStage2[1]).split('}')[0]
+                    # stage1[1] = re.sub('[^\\w-]+', '', stage1[1])
 
-            #error checking for if there's no translation
-            if check[1] == 'error':
-                definition = 'None'
-                wordClass = "None"
+                    stage2 = str(stage1).split('id')
+                    defRes = stage2[0]
+
+                    for char in defRes:
+                        if char.isalnum():
+                            definition += char
+                        elif char == ' ':
+                            definition += char
+
+                    definition = definition[1:]
+
             else:
-                wordStage1 = json.dumps(r.json()).split('lexicalCategory')
-                wordStage2 = str(wordStage1[1]).split('"text": ')
-                wordClass = str(wordStage2[1]).split('}')[0]
-                # stage1[1] = re.sub('[^\\w-]+', '', stage1[1])
-
-                stage2 = str(stage1).split('id')
-                defRes = stage2[0]
-
-                for char in defRes:
-                    if char.isalnum():
-                        definition += char
-                    elif char == ' ':
-                        definition += char
-
+                definition = str(dictionary.getMeanings()).split('[')
+                wordClass = definition[0]
+                wordClass = wordClass.split(':')
+                wordClass = str(wordClass).split('{')
+                wordClass = wordClass[2]
+                wordClass = str(wordClass).split('"')
+                wordClass = wordClass[0]
+                definition = definition[1].split('"')
+                definition = definition[0]
+                definition = str(definition).split(']')
+                definition = definition[0]
                 definition = definition[1:]
+        except:
+            ("Could not get definition")
 
-        else:
-            definition = str(dictionary.getMeanings()).split('[')
-            wordClass = definition[0]
-            wordClass = wordClass.split(':')
-            wordClass = str(wordClass).split('{')
-            wordClass = wordClass[2]
-            wordClass = str(wordClass).split('"')
-            wordClass = wordClass[0]
-            definition = definition[1].split('"')
-            definition = definition[0]
-            definition = str(definition).split(']')
-            definition = definition[0]
-            definition = definition[1:]
 
         result = translator.translate(new_word, lang_tgt='en')
         if isinstance(result, list):
             result = result[0]
         # result = re.sub("[^a-zA-Z']+", '', result)
         en_word = EnglishWord(word=result, definition=definition, word_class=wordClass)
-        en_word.save()
+        # en_word.save()
 
         # spanish word processing
         result1 = translator.translate(new_word, lang_tgt='es')
@@ -322,7 +330,7 @@ def check_trans(new_word, target_lang, native_lang):
         result1 = re.sub("[^a-zA-Z']+", '', result1)
         spa_word = SpanishWord(word=result1, definition=translator.translate(definition, 'es'),
                                word_class=translator.translate(wordClass, 'es'))
-        spa_word.save()
+        # spa_word.save()
 
         # french word processing
         result2 = translator.translate(new_word, lang_tgt='fr')
@@ -332,7 +340,7 @@ def check_trans(new_word, target_lang, native_lang):
         result2 = re.sub("[^a-zA-Z']+", '', result2)
         fr_word = FrenchWord(word=result2, definition=translator.translate(definition, 'fr'),
                              word_class=translator.translate(wordClass, 'fr'))
-        fr_word.save()
+        # fr_word.save()
 
         # russian word processing
         result3 = translator.translate(new_word, lang_tgt='ru')
@@ -341,7 +349,7 @@ def check_trans(new_word, target_lang, native_lang):
 
         rus_word = RussianWord(word=result3, definition=translator.translate(definition, 'ru'),
                                word_class=translator.translate(wordClass, 'ru'))
-        rus_word.save()
+        # rus_word.save()
 
         add_master_dict(EnglishWord.objects.filter(word=result).first(),
                         SpanishWord.objects.filter(word=result1).first(),
@@ -362,7 +370,7 @@ def check_trans(new_word, target_lang, native_lang):
 # called whenever a new word is added. it will make a new dictionary entry for the one word using all languages
 def add_master_dict(en_word, spa_word, fr_word, rus_word):
     add_word = Tdictionary(en_id=en_word, spa_id=spa_word, fr_id=fr_word, ru_id=rus_word)
-    add_word.save()
+    # add_word.save()
 
 
 

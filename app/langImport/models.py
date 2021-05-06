@@ -95,4 +95,4 @@ class Tdictionary(models.Model):
     fr_id = models.ForeignKey(FrenchWord, on_delete=models.CASCADE, related_name="lang4")
 
     def __str__(self):
-        return str(self.translation_id) + '|' + str(self.en_id)
+        return str(self.translation_id) +  '|' + str(self.en_id) + '|' + str(self.spa_id) + '|' + str(self.ru_id) + '|' + str(self.fr_id)

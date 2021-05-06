@@ -52,6 +52,9 @@ class ReadView(DetailView):
 def settings(request):
 	return render(request, 'langImport/settings.html', {})
 
+def about_page(request):
+	return render(request, 'langImport/about.html', {})
+
 def import_page(request):
 
 	
