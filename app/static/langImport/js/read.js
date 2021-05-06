@@ -414,9 +414,10 @@ btn_right.addEventListener("click", function(){
 	}
 	percent_bar.style.width =  percent + "%";
 	percent_bar.innerHTML = (Math.round(percent)) + "%";
-	console.log(sentence_num *page)
-	console.log("sentence_num = " + sentence_num)
-	console.log("pageNum = " + pageNum)
+	// console.log(sentence_num *page)
+	// console.log("sentence_num = " + sentence_num)
+	// console.log("pageNum = " + pageNum)
+	console.log(percent);
 
 	read_page = sentence_num * page;
 

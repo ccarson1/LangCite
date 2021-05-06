@@ -6,7 +6,11 @@
 
 	<h1 class="mt-5">Lessons</h1>
 	<div class="row row-cols-1 row-cols-md-3 g-4 mt-5 " >
+
 	{% for lesson in object_list %}
+		
+		{% if user.username == lesson.user_id.username %}
+
 		
 			 <div class="col" >
 	  	
@@ -25,8 +29,9 @@
 			      </div>
 			    </div>
 			  </div>
-	
-	
+		
+		{% endif %}
+
 		
 	 
 	{% endfor %}
