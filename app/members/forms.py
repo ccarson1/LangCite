@@ -6,7 +6,7 @@ import errno
 
 class UserRegForm(UserCreationForm):
 	email = forms.EmailField(widget=forms.EmailInput(attrs={'class' : 'form-control'}))
-	native_lang = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class' : 'form-control'}))
+	
 	first_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class' : 'form-control'}))
 	last_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class' : 'form-control'}))
 
@@ -16,7 +16,7 @@ class UserRegForm(UserCreationForm):
 
 	class Meta:
 		model = User
-		fields = ('username', 'first_name', 'last_name', 'email', 'native_lang', 'password1', 'password1')
+		fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password1')
 
 
 	def __init__(self, *args, **kwargs):
@@ -25,5 +25,5 @@ class UserRegForm(UserCreationForm):
 		self.fields['username'].widget.attrs['class'] = 'form-control'
 		self.fields['password1'].widget.attrs['class'] = 'form-control'
 		self.fields['password2'].widget.attrs['class'] = 'form-control'
-		self.fields['native_lang'].widget.attrs['class'] = 'form-control'
+		
 	
