@@ -1,5 +1,7 @@
 
-
+document.getElementById("targetLanguage").addEventListener("change", function(){
+	location.reload();
+});
 
 // sets the input as a file uploader or a text input on the form
 
@@ -81,25 +83,23 @@ function checkTarget(){
 	}
 };
 
-function NoTargetLanguageError(){
-	var NLV = document.getElementById("noLangVal");
-	if(NLV.innerHTML != "" || null ){
-		NLV.className = "alert alert-danger";
-	}else{
-		NLV.className = "alert alert-light";
-	}
+var u = document.getElementById("userLang");
+var t = document.getElementById("lessonLang");
+var b = document.getElementById("btn_upload")
+if(u.value == "" && t.value == ""){
+	alert("Specify a native language and a target language before proceeding!");
+	b.style.display = "none";
 }
-function NoNativeLanguageError(){
-	var NLV = document.getElementById("noNativeVal");
-	if(NLV.innerHTML != "" || null ){
-		NLV.className = "alert alert-danger";
-	}else{
-		NLV.className = "alert alert-light";
-	}
+else if(u.value == ""){
+	alert("Specify a native language before proceeding!");
+	b.style.display = "none";
+}
+else if(t.value == ""){
+	alert("Specify a target language before proceeding!");
+	b.style.display = "none";
 }
 
 
-NoTargetLanguageError();
-NoNativeLanguageError();
+
 checkCookie();
 window.onload = (function(){checkNativeCookie()});

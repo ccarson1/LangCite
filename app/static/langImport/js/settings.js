@@ -1,12 +1,6 @@
 
 
-function navLang(langItem){
-  var d = new Date();
-  d.setTime(d.getTime() + (1*24*60*60*1000));
-  var expires = "expires="+ d.toUTCString();
-  document.cookie = "Native=" + langItem + ";" + expires + ";path=/";
- 
-}
+
 
 function sent_in_par(num_sent){
   var d = new Date();

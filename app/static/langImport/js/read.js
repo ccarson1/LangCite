@@ -48,7 +48,7 @@ function set_mode(mode){
 function populate_words(){
 	position = getCookie("read_page");
 	pos = position.split(":_:")
-	console.log(pos[1]);
+	// console.log(pos[1]);
 
 	if(position == ""){
 		pos[0] = 0;
@@ -131,7 +131,7 @@ function populate_words(){
 populate_words();
 
 
-console.log(store_json.target_lang);
+// console.log(store_json.target_lang);
 
 
 function createReadButtons(word, word_pos, sent_pos){
@@ -224,7 +224,7 @@ function click_word(btn_word, btn_id){
 			}
 
 		}else{
-			console.log("sentence " + bust[0] + " on word " + bust[1] + " = " );
+			// console.log("sentence " + bust[0] + " on word " + bust[1] + " = " );
 		}
 		document.getElementById("target_word").innerHTML = btn_word;
 		
@@ -241,7 +241,7 @@ function click_word(btn_word, btn_id){
 					'csrfmiddlewaretoken': csrf
 				},
 				success: function(response){
-					console.log(response.native_word);
+					// console.log(response.native_word);
 					new_word = response.native_word;
 					
 					// if(new_word != null){
@@ -385,9 +385,9 @@ btn_left.addEventListener("click", function(){
 	
 	percent_bar.style.width =  percent + "%";
 	percent_bar.innerHTML = (Math.round(percent)) + "%";
-	console.log(sentence_num *page)
-	console.log("sentence_num = " + sentence_num)
-	console.log("pageNum = " + pageNum)
+	// console.log(sentence_num *page)
+	// console.log("sentence_num = " + sentence_num)
+	// console.log("pageNum = " + pageNum)
 
 	read_page = sentence_num * page;
 
@@ -417,7 +417,7 @@ btn_right.addEventListener("click", function(){
 	// console.log(sentence_num *page)
 	// console.log("sentence_num = " + sentence_num)
 	// console.log("pageNum = " + pageNum)
-	console.log(percent);
+	// console.log(percent);
 
 	read_page = sentence_num * page;
 

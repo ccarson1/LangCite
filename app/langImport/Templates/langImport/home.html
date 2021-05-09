@@ -13,17 +13,18 @@
 	      		and displays all the lessons that have a public boolean of true -->
 	      {% for lesson in object_list %}
 		      {% if lesson.public == True %}
-		      <div class="card m-auto p-2 mt-5" style="width: 35rem;">
+		      <div class="card m-auto p-2 mt-5 " style="width: 25rem;">
 				<h3>{{ lesson.lesson_title }}</h3>
 
 
-				  <a  href="{% url 'web-read' lesson.pk %}"><img src="{% static 'langImport/img/World.png' %}" class="card-img-top" alt="..."></a>
-				  <div class="card-body">
-				    <p class="card-text"></p>
+				  <a  href="{% url 'web-read' lesson.pk %}"><img src="{% static 'langImport/img/World.png' %}" class="card-img-top" style=".img-fluid.max-width: 100%; height: auto;"  alt="..."></a>
+				  <div class="card-body p-1">
+					  <small class=" mt-1">By : {{ lesson.user_id }}</small></br>
+					  <small class=" mt-1">Language : {{ lesson.language_id }}</small></br>
+					  <small class=" mt-1">Genre : {{ lesson.genre_id }}</small>
 				  </div>
-				  <small class="text-muted">By : {{ lesson.user_id }}</small><br/>
-				  <small class="text-muted">Language : {{ lesson.language_id }}</small><br/>
-				  <a class="btn btn-primary" href="{% url 'web-read' lesson.pk %}">Read</a>
+
+				  <!-- <a class="btn btn-primary" href="{% url 'web-read' lesson.pk %}">Read</a> -->
 			 </div>
 	
 			{% endif %}

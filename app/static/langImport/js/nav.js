@@ -1,6 +1,13 @@
+// var t = document.getElementById("targetLanguage");
+// if(t.innerHTML == ""){
+//   console.log("no language detected")
+// }
 
+if(getCookie("Native") == false){
+  console.log("no cookie");
+  navLang("English");
 
-
+}
 function langFun(langItem){
   var d = new Date();
   d.setTime(d.getTime() + (1*24*60*60*1000));
@@ -49,7 +56,13 @@ function checkCookie() {
   }
 }
 
+ function navLang(langItem){
+  var d = new Date();
+  d.setTime(d.getTime() + (1*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = "Native=" + langItem + ";" + expires + ";path=/";
  
+}
 
 window.onload = (function(){checkCookie()});
 

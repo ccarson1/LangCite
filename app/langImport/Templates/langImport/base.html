@@ -31,26 +31,26 @@
 		<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
 		  <div class="container-fluid">
 		    <a class="navbar-brand" href="#"></a>
-		    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		      <span class="navbar-toggler-icon"></span>
 		    </button>
 		    <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 		        <li class="nav-item">
-		          <a class="nav-link " aria-current="page" href="{% url 'web-home' %}">Home</a>
+		          <a class="nav-link text-light" aria-current="page" href="{% url 'web-home' %}">Home</a>
 		        </li>
 		         
 		        {% if user.is_authenticated %}
 		        	<li class="nav-item">
-			          <a class="nav-link" href="{% url 'web-lessons' %}">Lessons</a>
+			          <a class="nav-link text-light" href="{% url 'web-lessons' %}">Lessons</a>
 			        </li>
 			        <li class="nav-item">
-			          <a class="nav-link" href="{% url 'web-import' %}">Import</a>
+			          <a class="nav-link text-light" href="{% url 'web-import' %}">Import</a>
 			        </li>
 		        
 		        {% endif %}
 		        <li class="nav-item dropdown">
-		          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+		          <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 		            Languages
 		          </a>
 		          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -63,17 +63,22 @@
 		        </li>
 		       
 		        <li class="nav-item">
-		          <a class="nav-link" href="{% url 'web-about' %}">About</a>
+		          <a class="nav-link text-light" href="{% url 'web-about' %}">About</a>
 		        </li>
+
+		        <li class="nav-item">
+		          <a class="nav-link text-light" href="{% url 'web-help' %}">Help</a>
+		        </li>
+
 		       
 		        
 		      </ul>
 		      <div class="d-flex flex-row-reverse m-2" >
 		      	{% if user.is_authenticated %}
-		      		<a class="btn btn-outline-primary me-3" href="{% url 'logout' %}">Logout</a>
+		      		<a class="btn btn-outline-light me-3" href="{% url 'logout' %}">Logout</a>
 			        
 			        <div class="dropdown">
-					  <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+					  <a class="nav-link dropdown-toggle text-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 					    {{ user.first_name }}
 					  </a>
 					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -87,11 +92,21 @@
 			          
 			       
 		      	{% else %}
-		      		<a class="btn btn-outline-primary me-3" href="{% url 'login' %}">Login</a>
-					<a class="btn btn-outline-primary me-3" href="{% url 'register' %}">Register</a>
+		      		<a class="btn btn-outline-light me-3" href="{% url 'login' %}">Login</a>
+					<a class="btn btn-outline-light me-3" href="{% url 'register' %}">Register</a>
+
+					<div class="dropdown">
+					  <a class="nav-link dropdown-toggle text-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+					    Guest
+					  </a>
+					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					    
+					    <li><a class="dropdown-item" href="{% url 'web-settings' %}">Settings</a></li>
+					  </ul>
+					</div>
 		      	{% endif %}
 				
-				<a id="targetLanguage" class="nav-link " ></a>
+				<a id="targetLanguage" class="nav-link text-light" ></a>
 				
 			</div>
 		    </div>

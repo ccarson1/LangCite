@@ -137,15 +137,9 @@ def youtube_to_json(urlString, targetLang, nativeLang, up_title):
     if (nativeLang == 'fr'):
         nativeLang = 'French'
 
-
-
     new_string = json.loads(transcript)
 
     new_json = '{ "up_title": "' + up_title + '", "up_method": "' + up_method + '", "target_lang": "' + targetLang + '", "native_lang": "' + nativeLang + '", "lesson_sentences":['
-
-
-
-
 
     w_count = 0;
     for x in new_string:
@@ -171,16 +165,8 @@ def youtube_to_json(urlString, targetLang, nativeLang, up_title):
             new_json = new_json + ']}]}'
 
     new_json = json.loads(new_json)
-
-
-    # new_json = json.loads(new_json)
-
-    
-    
+  
     return json.dumps(new_json, ensure_ascii=False)
-
-
-
 
 # converts a pdf to image then image to string
 # depends on image_to_string method to work!!!
@@ -205,172 +191,314 @@ def pdf_to_string(pdf_file, target_lang):
 # using whenever new word is added as it'll automatically populate all other languages
 def check_trans(new_word, target_lang, native_lang):
     translator = google_translator()
-   
-    print(native_lang)
-    if(native_lang == "English"):
-        
-        result = translator.translate(new_word, lang_tgt='en')
-    
-    if(native_lang == "Spanish"):
-        
-        result = translator.translate(new_word, lang_tgt='es')
-    
-    if(native_lang == "French"):
-        
-        result = translator.translate(new_word, lang_tgt='fr')
-    
-    if(native_lang == "Russian"):
-       
-        result = translator.translate(new_word, lang_tgt='ru')
-    
-    
 
-    result = result.strip()
-    result = result.replace(' ', '-')
+    if target_lang == "English":
+        if EnglishWord.objects.filter(word=new_word).exists():
+            if native_lang == "Spanish":
+                result = translator.translate(new_word, lang_tgt='es')
+                print(result)
+                result = result.strip()
+                result = result.replace(' ', '-')
 
+                if isinstance(result, list):
+                    result = result[0]
+                result = re.sub("[^a-zA-Z']+", '', result)
+                return result
+            if native_lang == "French":
+                result = translator.translate(new_word, lang_tgt='fr')
+                print(result)
+                result = result.strip()
+                result = result.replace(' ', '-')
+
+                if isinstance(result, list):
+                    result = result[0]
+                result = re.sub("[^a-zA-Z']+", '', result)
+                return result
+
+            if native_lang == "Russian":
+                result = translator.translate(new_word, lang_tgt='ru')
+                print(result)
+                result = result.strip()
+                result = result.replace(' ', '-')
+
+                if isinstance(result, list):
+                    result = result[0]
+                result = re.sub("[^\\w-]+", '', result)
+                return result
+            if(native_lang) == "English":
+                return new_word
+        else:
+            return save_word(new_word, target_lang, native_lang)
+            
+ 
+####Cannot find spanish words in the SpanishWord table///searches the EnglishWords table instead!!
+    if target_lang == "Spanish":
+        # new_word = re.sub("[^-_/.,\\p{L}0-9 ]+", '', new_word)
+        results = translator.translate(new_word, lang_tgt='en')
+        print(results)
+        results = results.strip()
+        results = results.replace(' ', '-')
+
+        if isinstance(results, list):
+            results = results[0]
+        results = re.sub("[^a-zA-Z']+", '', results)
+
+        if EnglishWord.objects.filter(word=results).exists():
+            if native_lang == "English":
+
+                return results
+            if native_lang == "French":
+                result = translator.translate(new_word, lang_tgt='fr')
+                print(result)
+                result = result.strip()
+                result = result.replace(' ', '-')
+
+                if isinstance(result, list):
+                    result = result[0]
+                result = re.sub("[^a-zA-Z']+", '', result)
+                return result
+            if native_lang == "Russian":
+                result = translator.translate(new_word, lang_tgt='ru')
+                print(result)
+                result = result.strip()
+                result = result.replace(' ', '-')
+
+                if isinstance(result, list):
+                    result = result[0]
+                result = re.sub("[^\\w-]+", '', result)
+                return result
+            if(native_lang) == "Spanish":
+                return new_word
+
+        else:
+            return save_word(new_word, target_lang, native_lang)
+            
+
+    if target_lang == "French":
+        resultf = translator.translate(new_word, lang_tgt='en')
+        print("The english is "+resultf)
+        resultf = resultf.strip()
+        resultf = resultf.replace(' ', '-')
+
+        if isinstance(resultf, list):
+            resultf = resultf[0]
+        resultf = re.sub("[^a-zA-Z']+", '', resultf)
+
+        if EnglishWord.objects.filter(word=resultf).exists():
+            if native_lang == "Spanish":
+                result = translator.translate(new_word, lang_tgt='es')
+                print(result)
+                result = result.strip()
+                result = result.replace(' ', '-')
+
+                if isinstance(result, list):
+                    result = result[0]
+                result = re.sub("[^a-zA-Z']+", '', result)
+                return result
+            if native_lang == "English":
+
+                return resultf
+            if native_lang == "Russian":
+                result = translator.translate(new_word, lang_tgt='ru')
+                print(result)
+                result = result.strip()
+                result = result.replace(' ', '-')
+
+                if isinstance(result, list):
+                    result = result[0]
+                result = re.sub("[^\\w-]+", '', result)
+                return result
+            if(native_lang) == "French":
+                return new_word
+
+        else:
+            print("The new word is " + new_word)
+            return save_word(new_word, target_lang, native_lang)
+
+#####Cannot find russian words in the RussianWord table///searches the EnglishWords table instead!!
+    if target_lang == "Russian":
+        resultn = translator.translate(new_word, lang_tgt='en')
+        resultn = resultn.strip()
+        resultn = resultn.replace(' ', '-')
+
+        if isinstance(resultn, list):
+            resultn = resultn[0]
+        resultn = re.sub("[^a-zA-Z']+", '', resultn)
+
+        if EnglishWord.objects.filter(word=resultn).exists():
+            print("we are here")
+            if native_lang == "Spanish":
+                result = translator.translate(new_word, lang_tgt='es')
+                print(result)
+                result = result.strip()
+                result = result.replace(' ', '-')
+
+                if isinstance(result, list):
+                    result = result[0]
+                result = re.sub("[^a-zA-Z']+", '', result)
+                return result
+            if native_lang == "French":
+                result = translator.translate(new_word, lang_tgt='fr')
+                print(result)
+                result = result.strip()
+                result = result.replace(' ', '-')
+
+                if isinstance(result, list):
+                    result = result[0]
+                result = re.sub("[^a-zA-Z']+", '', result)
+                return result
+            if native_lang == "English":
+
+                return resultn
+            if(native_lang) == "Russian":
+                return new_word
+
+        # definition and word class hell
+        else:
+            #return "It didn't work"
+            return save_word(new_word, target_lang, native_lang)
+            
+
+    else:
+        pass
+
+def save_word(new_word, target_lang, native_lang):
+    translator = google_translator()
+
+    dictionary = PyDictionary(new_word)
+    definition = ''
+    wordClass = ''
+    
+    if dictionary.getMeanings()[new_word] is None:
+
+        l_ref = ''
+        if(target_lang == "English"):
+            l_ref = 'en'
+        if(target_lang == "Spanish"):
+            l_ref = 'es'
+        if(target_lang == "French"):
+            l_ref = 'fr'
+        if(target_lang == "Russian"):
+            l_ref = 'ru'
+
+        # backup using oxford dictionary
+        # has a 1000 request limit so is ONLY to be used as a fallback in case PyDictionary doesn't work like it
+        # sometimes does
+        app_id = '357c2725'
+        app_key = 'ec311ce6a30cde29b5a736a5301f0d9c'
+
+        url = 'https://od-api.oxforddictionaries.com/api/v2/entries/' + l_ref + '/' + new_word.lower() + '?' + \
+              "fields=definitions"
+        r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
+
+        
+        stage1 = json.dumps(r.json()).split('definitions')
+
+        check = str(stage1).split('"')
+
+        #error checking for if there's no translation
+        if check[1] == 'error':
+            definition = 'None'
+            wordClass = "None"
+        else:
+            wordStage1 = json.dumps(r.json()).split('lexicalCategory')
+            wordStage2 = str(wordStage1[1]).split('"text": ')
+            wordClass = str(wordStage2[1]).split('}')[0]
+            # stage1[1] = re.sub('[^\\w-]+', '', stage1[1])
+
+            stage2 = str(stage1).split('id')
+            defRes = stage2[0]
+
+            for char in defRes:
+                if char.isalnum():
+                    definition += char
+                elif char == ' ':
+                    definition += char
+
+            definition = definition[1:]
+
+    else:
+        definition = str(dictionary.getMeanings()).split('[')
+        wordClass = definition[0]
+        wordClass = wordClass.split(':')
+        wordClass = str(wordClass).split('{')
+        wordClass = wordClass[2]
+        wordClass = str(wordClass).split('"')
+        wordClass = wordClass[0]
+        definition = definition[1].split('"')
+        definition = definition[0]
+        definition = str(definition).split(']')
+        definition = definition[0]
+        definition = definition[1:]
+
+
+    print(new_word)
+    # english word processing
+    result = translator.translate(new_word, lang_tgt='en')
     if isinstance(result, list):
         result = result[0]
+
     result = re.sub("[^a-zA-Z']+", '', result)
+    en_word = EnglishWord(word=result, definition=translator.translate(definition, 'en'),
+                           word_class=translator.translate(wordClass, 'en'))
+    print("The result is " + result)
+    en_word.save()
 
-    # with this I'm assuming that since if a word is added there'll be an English translation,
-    # that if it is missing then the word just doesn't exist
-    if(native_lang == "English" and EnglishWord.objects.filter(word=result).exists()):
-        print(result + " exists")
+    # spanish word processing
+    result1 = translator.translate(new_word, lang_tgt='es')
+    if isinstance(result1, list):
+        result1 = result1[0]
+    #this line is and error and cuts out special characters in the spanish alphabet
+    # result1 = re.sub("[^-_/.,\\p{L}0-9 ]+", '', result1)
+    # result1 = re.sub("[^a-zA-Z']+", '', result1)
+    spa_word = SpanishWord(word=result1, definition=translator.translate(definition, 'es'),
+                           word_class=translator.translate(wordClass, 'es'))
+    spa_word.save()
+
+    # french word processing
+    result2 = translator.translate(new_word, lang_tgt='fr')
+    if isinstance(result2, list):
+        result2 = result2[0]
+
+    result2 = re.sub("[^a-zA-Z']+", '', result2)
+    fr_word = FrenchWord(word=result2, definition=translator.translate(definition, 'fr'),
+                         word_class=translator.translate(wordClass, 'fr'))
+    fr_word.save()
+
+    # russian word processing
+    result3 = translator.translate(new_word, lang_tgt='ru')
+    if isinstance(result3, list):
+        result3 = result3[0]
+        result3 = re.sub("[^\\w-]+", '', result3)
+
+    rus_word = RussianWord(word=result3, definition=translator.translate(definition, 'ru'),
+                           word_class=translator.translate(wordClass, 'ru'))
+    rus_word.save()
+
+    add_master_dict(EnglishWord.objects.filter(word=result).first(),
+                    SpanishWord.objects.filter(word=result1).first(),
+                    FrenchWord.objects.filter(word=result2).first(),
+                    RussianWord.objects.filter(word=result3).first())
+    # print(native_lang)
+    # print(result3)
+    if native_lang == "English":
+        print("saved word (EN)")
         return result
-
-    if(native_lang == "Spanish" and SpanishWord.objects.filter(word=result).exists()):
-        print(result + " exists")
-        return result
-    if(native_lang == "French" and FrenchWord.objects.filter(word=result).exists()):
-        print(result + " exists")
-        return result
-    if(native_lang == "Russian" and RussianWord.objects.filter(word=result).exists()):
-        print(result + " exists")
-        return result
-    
-
-
-        
-
-
-    # definition and word class hell
-    elif not EnglishWord.objects.filter(word=result).exists() or SpanishWord.objects.filter(word=result).exists() or FrenchWord.objects.filter(word=result).exists() or RussianWord.objects.filter(word=result).exists():
-
-        dictionary = PyDictionary(result)
-        definition = ''
-        wordClass = ''
-        try:
-            if dictionary.getMeanings()[result] is None:
-
-                # backup using oxford dictionary
-                # has a 1000 request limit so is ONLY to be used as a fallback in case PyDictionary doesn't work like it
-                # sometimes does
-                app_id = '357c2725'
-                app_key = 'ec311ce6a30cde29b5a736a5301f0d9c'
-
-                url = 'https://od-api.oxforddictionaries.com/api/v2/entries/' + 'en' + '/' + result.lower() + '?' + \
-                      "fields=definitions"
-                r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
-
-                
-                stage1 = json.dumps(r.json()).split('definitions')
-
-                check = str(stage1).split('"')
-
-                #error checking for if there's no translation
-                if check[1] == 'error':
-                    definition = 'None'
-                    wordClass = "None"
-                else:
-                    wordStage1 = json.dumps(r.json()).split('lexicalCategory')
-                    wordStage2 = str(wordStage1[1]).split('"text": ')
-                    wordClass = str(wordStage2[1]).split('}')[0]
-                    # stage1[1] = re.sub('[^\\w-]+', '', stage1[1])
-
-                    stage2 = str(stage1).split('id')
-                    defRes = stage2[0]
-
-                    for char in defRes:
-                        if char.isalnum():
-                            definition += char
-                        elif char == ' ':
-                            definition += char
-
-                    definition = definition[1:]
-
-            else:
-                definition = str(dictionary.getMeanings()).split('[')
-                wordClass = definition[0]
-                wordClass = wordClass.split(':')
-                wordClass = str(wordClass).split('{')
-                wordClass = wordClass[2]
-                wordClass = str(wordClass).split('"')
-                wordClass = wordClass[0]
-                definition = definition[1].split('"')
-                definition = definition[0]
-                definition = str(definition).split(']')
-                definition = definition[0]
-                definition = definition[1:]
-        except:
-            ("Could not get definition")
-
-
-        result = translator.translate(new_word, lang_tgt='en')
-        if isinstance(result, list):
-            result = result[0]
-        # result = re.sub("[^a-zA-Z']+", '', result)
-        en_word = EnglishWord(word=result, definition=definition, word_class=wordClass)
-        # en_word.save()
-
-        # spanish word processing
-        result1 = translator.translate(new_word, lang_tgt='es')
-        if isinstance(result1, list):
-            result1 = result1[0]
-
-        result1 = re.sub("[^a-zA-Z']+", '', result1)
-        spa_word = SpanishWord(word=result1, definition=translator.translate(definition, 'es'),
-                               word_class=translator.translate(wordClass, 'es'))
-        # spa_word.save()
-
-        # french word processing
-        result2 = translator.translate(new_word, lang_tgt='fr')
-        if isinstance(result2, list):
-            result2 = result2[0]
-
-        result2 = re.sub("[^a-zA-Z']+", '', result2)
-        fr_word = FrenchWord(word=result2, definition=translator.translate(definition, 'fr'),
-                             word_class=translator.translate(wordClass, 'fr'))
-        # fr_word.save()
-
-        # russian word processing
-        result3 = translator.translate(new_word, lang_tgt='ru')
-        if isinstance(result3, list):
-            result3 = result3[0]
-
-        rus_word = RussianWord(word=result3, definition=translator.translate(definition, 'ru'),
-                               word_class=translator.translate(wordClass, 'ru'))
-        # rus_word.save()
-
-        add_master_dict(EnglishWord.objects.filter(word=result).first(),
-                        SpanishWord.objects.filter(word=result1).first(),
-                        FrenchWord.objects.filter(word=result2).first(),
-                        RussianWord.objects.filter(word=result3).first())
-
-        if native_lang == "English":
-            print(result + " does not exist")
-            return result
-        if native_lang == "Spanish":
-            return result1
-        if native_lang == "French":
-            return result2
-        if native_lang == "Russian":
-            return result3
+    if native_lang == "Spanish":
+        print("saved word (SP)")
+        return result1
+    if native_lang == "French":
+        print("saved word (FR)")
+        return result2
+    if native_lang == "Russian":
+        print("saved word (RU)")
+        return result3
 
 
 # called whenever a new word is added. it will make a new dictionary entry for the one word using all languages
 def add_master_dict(en_word, spa_word, fr_word, rus_word):
     add_word = Tdictionary(en_id=en_word, spa_id=spa_word, fr_id=fr_word, ru_id=rus_word)
-    # add_word.save()
+    add_word.save()
 
 
 

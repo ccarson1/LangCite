@@ -36,7 +36,7 @@ class ReadView(DetailView):
 		btn_target = request.POST.get('btn_target')
 		btn_native = request.POST.get('btn_native')
 		# print(btn_word)
-		# print(type(btn_target))
+		print(btn_target)
 		print(btn_native)
 		# print(pk)
 		if request.is_ajax():
@@ -54,6 +54,9 @@ def settings(request):
 
 def about_page(request):
 	return render(request, 'langImport/about.html', {})
+
+def help_page(request):
+	return render(request, 'langImport/help.html', {})
 
 def import_page(request):
 
