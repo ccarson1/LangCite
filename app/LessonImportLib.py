@@ -245,8 +245,8 @@ def check_trans(new_word, target_lang, native_lang):
 
         if EnglishWord.objects.filter(word=results).exists():
             if native_lang == "English":
-
                 return results
+
             if native_lang == "French":
                 result = translator.translate(new_word, lang_tgt='fr')
                 print(result)
@@ -369,72 +369,80 @@ def save_word(new_word, target_lang, native_lang):
     definition = ''
     wordClass = ''
     
-    if dictionary.getMeanings()[new_word] is None:
+    try:
+        if dictionary.getMeanings()[new_word] is None:
+            
+            
+            print("there are no dictionary meanings")
 
-        l_ref = ''
-        if(target_lang == "English"):
-            l_ref = 'en'
-        if(target_lang == "Spanish"):
-            l_ref = 'es'
-        if(target_lang == "French"):
-            l_ref = 'fr'
-        if(target_lang == "Russian"):
-            l_ref = 'ru'
+            l_ref = ''
+            if(target_lang == "English"):
+                l_ref = 'en'
+            if(target_lang == "Spanish"):
+                l_ref = 'es'
+            if(target_lang == "French"):
+                l_ref = 'fr'
+            if(target_lang == "Russian"):
+                l_ref = 'ru'
 
-        # backup using oxford dictionary
-        # has a 1000 request limit so is ONLY to be used as a fallback in case PyDictionary doesn't work like it
-        # sometimes does
-        app_id = '357c2725'
-        app_key = 'ec311ce6a30cde29b5a736a5301f0d9c'
+            # backup using oxford dictionary
+            # has a 1000 request limit so is ONLY to be used as a fallback in case PyDictionary doesn't work like it
+            # sometimes does
+            app_id = '357c2725'
+            app_key = 'ec311ce6a30cde29b5a736a5301f0d9c'
 
-        url = 'https://od-api.oxforddictionaries.com/api/v2/entries/' + l_ref + '/' + new_word.lower() + '?' + \
-              "fields=definitions"
-        r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
+            url = 'https://od-api.oxforddictionaries.com/api/v2/entries/' + l_ref + '/' + new_word.lower() + '?' + \
+                  "fields=definitions"
+            r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
+            print(r)
+            
+            stage1 = json.dumps(r.json()).split('definitions')
+            print(stage1)
+            check = str(stage1).split('"')
 
-        
-        stage1 = json.dumps(r.json()).split('definitions')
+            #error checking for if there's no translation
+            if check[1] == 'error':
+                definition = 'None'
+                wordClass = "None"
+            else:
+                wordStage1 = json.dumps(r.json()).split('lexicalCategory')
+                wordStage2 = str(wordStage1[1]).split('"text": ')
+                wordClass = str(wordStage2[1]).split('}')[0]
+                # stage1[1] = re.sub('[^\\w-]+', '', stage1[1])
 
-        check = str(stage1).split('"')
+                stage2 = str(stage1).split('id')
+                defRes = stage2[0]
 
-        #error checking for if there's no translation
-        if check[1] == 'error':
-            definition = 'None'
-            wordClass = "None"
+                for char in defRes:
+                    if char.isalnum():
+                        definition += char
+                    elif char == ' ':
+                        definition += char
+
+                definition = definition[1:]
+
         else:
-            wordStage1 = json.dumps(r.json()).split('lexicalCategory')
-            wordStage2 = str(wordStage1[1]).split('"text": ')
-            wordClass = str(wordStage2[1]).split('}')[0]
-            # stage1[1] = re.sub('[^\\w-]+', '', stage1[1])
-
-            stage2 = str(stage1).split('id')
-            defRes = stage2[0]
-
-            for char in defRes:
-                if char.isalnum():
-                    definition += char
-                elif char == ' ':
-                    definition += char
-
+            definition = str(dictionary.getMeanings()).split('[')
+            wordClass = definition[0]
+            wordClass = wordClass.split(':')
+            wordClass = str(wordClass).split('{')
+            wordClass = wordClass[2]
+            wordClass = str(wordClass).split('"')
+            wordClass = wordClass[0]
+            definition = definition[1].split('"')
+            definition = definition[0]
+            definition = str(definition).split(']')
+            definition = definition[0]
             definition = definition[1:]
-
-    else:
-        definition = str(dictionary.getMeanings()).split('[')
-        wordClass = definition[0]
-        wordClass = wordClass.split(':')
-        wordClass = str(wordClass).split('{')
-        wordClass = wordClass[2]
-        wordClass = str(wordClass).split('"')
-        wordClass = wordClass[0]
-        definition = definition[1].split('"')
-        definition = definition[0]
-        definition = str(definition).split(']')
-        definition = definition[0]
-        definition = definition[1:]
+    except:
+        pass
 
 
-    print(new_word)
+    print("made it here")
     # english word processing
     result = translator.translate(new_word, lang_tgt='en')
+    #####Temporarily uses English########
+    # result = new_word
     if isinstance(result, list):
         result = result[0]
 
