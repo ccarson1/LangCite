@@ -31,3 +31,4 @@ Ummm, well, here's the steps:
 3. `git pull` Then pull for real
 4. `git stash pop` then pop the stashed changes back to repo
 5. `git reset HEAD .` then reset the status of git repo so that there aren't any weird stuff like in progress commits and then you can git pull again in the future.
+6. Then redo step 12 of the install procedure to fix permissions: `sudo chmod -R 775 app && sudo chown -R :www-data app && sudo chmod 664 app/db.sqlite3`
