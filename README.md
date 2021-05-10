@@ -22,3 +22,12 @@ Here are then the instructions on how to deploy on Debian/Ubuntu, instructions a
 13. Then restart the Apache daemon: `sudo systemctl restart apache2.service`
 
 ### And there you go, you have set up LangCite and it should work now! :D
+
+## How to update though?
+
+Ummm, well, here's the steps:
+1. `git pull` You need to pull first if you need to stash or not
+2. `git stash`If you see conflicts and it tells you to stash or add/commit changes, then stash
+3. `git pull` Then pull for real
+4. `git stash pop` then pop the stashed changes back to repo
+5. `git reset HEAD .` then reset the status of git repo so that there aren't any weird stuff like in progress commits and then you can git pull again in the future.
