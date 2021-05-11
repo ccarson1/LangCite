@@ -4,7 +4,7 @@
 // }
 
 if(getCookie("Native") == false){
-  console.log("no cookie");
+  
   navLang("English");
 
 }

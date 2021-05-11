@@ -3,7 +3,53 @@
 {% block content %}
 
 <div class="container">
-	<h1 class="mx-auto">Help</h1>
+	<h1 class="mx-auto">How to use this website</h1>
+	<h3>Table of Contents</h3>
+	<ol class="list-group list-group-flush">
+		<li class="list-group-item">1: Register</li><br>
+		<li class="list-group-item">2: How To Use The Lessons</li><br>
+		<li class="list-group-item">3: How To Add a Lesson</li><br>
+		<li class="list-group-item">4: How to Login</li><br>
+		<li class="list-group-item">5: How to Logoff</li><br>
+		<li class="list-group-item">6: How to Set a Native Language</li><br>
+	</ol>
+	<h2 class="mt-5">Register</h2>
+	<p class="mt-3">
+	First you should login, but you don’t need to be logged in to read the website’s lessons. Sign up for an account by clicking “Register” on the header of the page.  Then Type in an username, first and last name, email, and a password. If the information isn’t acceptable, you’ll be spat back to the registration page and a more sets of bullet points will tell the user what is wrong with their information. If you click cancel you’ll go back to the main page.
+	</p>
+<br>
+	<img src="{% static 'langImport/img/Picture1.png' %}">
+	<p class="mt-3">
+		After you are registered, verify if your native language is what you wanted and supported by LangCite. Click on your username and click on Settings. Click on your native language and hit “Save Settings.” A pop up will notify you that you picked your language, like “English 1” for example. Then return back to the home page by clicking Home.
+	</p>
+	<h2 class="mt-5">How To Use The Lessons</h2>
+	<p class="mt-3">
+		From Home, you can pick passages of available writings, aka “lessons,” for you to learn the languages of with a word by word translator and pronouncement program. Pick the lesson you want and click on the image of a lesson.
+	</p>
+	<img src="{% static 'langImport/img/Picture2.png' %}">
+	<br>
+	<p class="mt-3">
+		After you enter the lesson, there will be a bar that starts as a blue line or whatever in the center, previous and next buttons, a box below with the play button and definition of the selected word, and a sentence on each “page.” Hit “Next” to move to the next sentence, “Prev” to go back, and click on the word to get a translation on the bottom. Hit “Play” after clicking the word to hear how to pronounce the word. To get a translation, you must set your native language to a valid language and your language you’re gonna learn to the language of the lesson. To do the latter, click on the drop down menu for languages and click the language of the lesson, then you’ll get translations on the bottom.
+	</p>
+	<h2 class="mt-5">How To Add a Lesson</h2>
+	<p class="mt-3">
+		To add personal lessons, make sure the native and target language are selected, using instructions earlier from the “How To Use The Lessons” section above. If the target isn’t selected the website will warn you so that you will know you need to select the target. After that, just hit the import method and provide the file, the title, the genre, and see if you want it to be public on the site or private. Then, hit the create button and the lesson will be uploaded. The uploaded file will be translated to your native language. Hit cancel if you want to go back to Home.
+	</p>
+	<img src="{% static 'langImport/img/Picture3.png' %}">
+	<h2 class="mt-5">How to Login</h2>
+	<p class="mt-3">
+		To login, hit the login button, then in the two boxes, type in your information, and then hit the login button below the two bars, you’ll be then logged in
+	</p>
+	<h2 class="mt-5">How to Logoff</h2>
+	<p class="mt-3">
+		There’s a logout button on the header, click it and you’ll log out.
+	</p>
+	<h2 class="mt-5">How to Set a Native Language</h2>
+	<p class="mt-3">
+		By default, the native language is set to English. A registered user can access the settings page located on the dropdown menu by clicked their name in the top right corner of the page. All unregistered users can access the settings page the same way by clicking the Guest dropdown menu.
+	</p>
+
+
 </div>
 
 
