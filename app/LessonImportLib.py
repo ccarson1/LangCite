@@ -27,10 +27,10 @@ except ImportError:
 
 # pass image and language reference to create lesson
 def image_to_string(image_file, imageLang):
-    tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-    image_string = tess.image_to_string(Image.open(image_file), lang=imageLang)
+    tess.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+    image_string = tess.image_to_string(Image.open("/home/admin/LangCite/app/media/" + image_file), lang=imageLang)
 
-    os.remove(image_file)
+    os.remove("/home/admin/LangCite/app/media/" + image_file)
     return image_string
 
 
@@ -526,7 +526,6 @@ def remove_control_characters(s):
 
 def extract_id(url):
     """Returns Video_ID extracting from the given url of Youtube
-
     Examples of URLs:
       Valid:
         'http://youtu.be/_lOT2p_FCvA',
@@ -535,7 +534,6 @@ def extract_id(url):
         'http://www.youtube.com/v/_lOT2p_FCvA?version=3&amp;hl=en_US',
         'https://www.youtube.com/watch?v=rTHlyTphWP0&index=6&list=PLjeDyYvG6-40qawYNR4juzvSOg-ezZ2a6',
         'youtube.com/watch?v=_lOT2p_FCvA',
-
       Invalid:
         'youtu.be/watch?v=_lOT2p_FCvA',
     """
